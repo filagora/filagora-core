@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace ForumKit\Core;
 
+use ForumKit\Core\Content\ExtensionRegistry;
+use ForumKit\Core\Content\MarkdownRenderer;
 use ForumKit\Core\Events\SettingChanged;
 use ForumKit\Core\Modules\Module;
 use ForumKit\Core\Modules\ModuleRegistry;
@@ -22,6 +24,8 @@ class CoreServiceProvider extends ServiceProvider
         $this->app->singleton(ModuleRegistry::class);
         $this->app->singleton(NavigationGroupRegistry::class);
         $this->app->scoped(SettingsRegistry::class);
+        $this->app->singleton(ExtensionRegistry::class);
+        $this->app->singleton(MarkdownRenderer::class);
     }
 
     public function boot(): void

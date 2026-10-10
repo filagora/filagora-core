@@ -44,6 +44,22 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Markdown
+    |--------------------------------------------------------------------------
+    |
+    | `line_breaks` turns a single newline into a visible break. `internal_hosts`
+    | lists extra hosts whose links are not marked as external; the host of
+    | `app.url` is always included.
+    |
+    */
+    'markdown' => [
+        'line_breaks' => true,
+        'max_nesting_level' => 100,
+        'internal_hosts' => [],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Settings
     |--------------------------------------------------------------------------
     |
