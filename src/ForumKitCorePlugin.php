@@ -6,6 +6,7 @@ namespace ForumKit\Core;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
+use ForumKit\Core\Navigation\NavigationGroupRegistry;
 
 class ForumKitCorePlugin implements Plugin
 {
@@ -26,6 +27,6 @@ class ForumKitCorePlugin implements Plugin
 
     public function boot(Panel $panel): void
     {
-        //
+        $panel->navigationGroups(app(NavigationGroupRegistry::class)->toFilament());
     }
 }

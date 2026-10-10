@@ -23,4 +23,9 @@ class InvalidConfiguration extends InvalidArgumentException
     {
         return new self('No ForumKit user model is configured and auth.providers.users.model is not set. Set forumkit.user_model or call ForumKit::useUserModel().');
     }
+
+    public static function moduleNotRegistered(string $id): self
+    {
+        return new self("ForumKit module [{$id}] is not registered.");
+    }
 }

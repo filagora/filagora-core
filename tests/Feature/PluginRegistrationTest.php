@@ -6,7 +6,7 @@ use Filament\Panel;
 use ForumKit\Core\ForumKitCorePlugin;
 
 it('merges the package config', function () {
-    expect(config('forumkit.navigation_group'))->toBe('ForumKit');
+    expect(config('forumkit.table_prefix'))->toBe('forumkit_');
 });
 
 it('registers on a panel', function () {

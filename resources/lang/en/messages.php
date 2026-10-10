@@ -3,5 +3,7 @@
 declare(strict_types=1);
 
 return [
-    'navigation_group' => 'ForumKit',
+    'navigation_groups' => [
+        'system' => 'System',
+    ],
 ];

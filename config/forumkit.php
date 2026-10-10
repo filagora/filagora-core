@@ -31,13 +31,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Navigation group
+    | Navigation
     |--------------------------------------------------------------------------
     |
-    | The Filament navigation group this package's resources are placed in.
-    | `env()` is only ever used in config files, and config holds no closures.
+    | Each package registers its own sidebar groups. List only the overrides you
+    | want, keyed by group key, for example:
+    |
+    |   'groups' => ['system' => ['label' => 'Admin', 'sort' => 900, 'collapsed' => false]],
+    |
+    | Supported keys: label, icon, sort, collapsed.
     |
     */
-    'navigation_group' => env('FORUMKIT_NAVIGATION_GROUP', 'ForumKit'),
+    'navigation' => [
+        'groups' => [],
+    ],
 
 ];
