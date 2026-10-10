@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace ForumKit\Core;
 
+use ForumKit\Core\Events\SettingChanged;
 use ForumKit\Core\Modules\Module;
 use ForumKit\Core\Modules\ModuleRegistry;
 use ForumKit\Core\Navigation\NavigationGroupDefinition;
 use ForumKit\Core\Navigation\NavigationGroupRegistry;
+use ForumKit\Core\Settings\SettingsRegistry;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 class CoreServiceProvider extends ServiceProvider
@@ -18,6 +21,7 @@ class CoreServiceProvider extends ServiceProvider
 
         $this->app->singleton(ModuleRegistry::class);
         $this->app->singleton(NavigationGroupRegistry::class);
+        $this->app->scoped(SettingsRegistry::class);
     }
 
     public function boot(): void
@@ -34,6 +38,8 @@ class CoreServiceProvider extends ServiceProvider
                 sort: 900,
             ),
         );
+
+        Event::listen(SettingChanged::class, fn () => $this->app->make(SettingsRegistry::class)->flush());
 
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'forumkit');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'forumkit');
