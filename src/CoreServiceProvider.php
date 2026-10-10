@@ -4,13 +4,21 @@ declare(strict_types=1);
 
 namespace ForumKit\Core;
 
+use ForumKit\Core\Commands\DoctorCommand;
+use ForumKit\Core\Commands\InstallCommand;
 use ForumKit\Core\Content\ExtensionRegistry;
 use ForumKit\Core\Content\MarkdownRenderer;
+use ForumKit\Core\Doctor\Checks\MigrationsCheck;
+use ForumKit\Core\Doctor\Checks\ModulesCheck;
+use ForumKit\Core\Doctor\Checks\PhpVersionCheck;
+use ForumKit\Core\Doctor\Checks\UserModelCheck;
+use ForumKit\Core\Doctor\Doctor;
 use ForumKit\Core\Events\SettingChanged;
 use ForumKit\Core\Modules\Module;
 use ForumKit\Core\Modules\ModuleRegistry;
 use ForumKit\Core\Navigation\NavigationGroupDefinition;
 use ForumKit\Core\Navigation\NavigationGroupRegistry;
+use ForumKit\Core\Privacy\PrivacyContributorRegistry;
 use ForumKit\Core\Settings\SettingsRegistry;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
@@ -26,6 +34,8 @@ class CoreServiceProvider extends ServiceProvider
         $this->app->scoped(SettingsRegistry::class);
         $this->app->singleton(ExtensionRegistry::class);
         $this->app->singleton(MarkdownRenderer::class);
+        $this->app->singleton(PrivacyContributorRegistry::class);
+        $this->app->singleton(Doctor::class);
     }
 
     public function boot(): void
@@ -49,7 +59,15 @@ class CoreServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'forumkit');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
+        $doctor = $this->app->make(Doctor::class);
+        $doctor->register(new PhpVersionCheck);
+        $doctor->register(new UserModelCheck);
+        $doctor->register(new MigrationsCheck);
+        $doctor->register($this->app->make(ModulesCheck::class));
+
         if ($this->app->runningInConsole()) {
+            $this->commands([DoctorCommand::class, InstallCommand::class]);
+
             $this->publishes([
                 __DIR__.'/../config/forumkit.php' => config_path('forumkit.php'),
             ], 'forumkit-config');
