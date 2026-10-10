@@ -6,6 +6,7 @@ namespace ForumKit\Core;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
+use ForumKit\Core\Filament\Resources\Settings\SettingResource;
 use ForumKit\Core\Navigation\NavigationGroupRegistry;
 
 class ForumKitCorePlugin implements Plugin
@@ -22,7 +23,9 @@ class ForumKitCorePlugin implements Plugin
 
     public function register(Panel $panel): void
     {
-        // Register resources, pages and widgets here.
+        $panel->resources([
+            SettingResource::class,
+        ]);
     }
 
     public function boot(Panel $panel): void

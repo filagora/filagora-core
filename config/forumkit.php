@@ -44,6 +44,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Settings
+    |--------------------------------------------------------------------------
+    |
+    | `ability` is the Gate ability that grants access to the settings screen.
+    | Nothing defines it by default, so access is denied until it is defined.
+    |
+    */
+    'settings' => [
+        'ability' => 'forumkit.settings.manage',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Navigation
     |--------------------------------------------------------------------------
     |
