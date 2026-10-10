@@ -31,6 +31,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | User title attribute
+    |--------------------------------------------------------------------------
+    |
+    | The attribute on the user model that names a user in selects, tables and
+    | labels, for example `username` or `name`.
+    |
+    */
+    'user_title_attribute' => env('FORUMKIT_USER_TITLE_ATTRIBUTE', 'name'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Swappable models
     |--------------------------------------------------------------------------
     |

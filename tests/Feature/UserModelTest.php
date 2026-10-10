@@ -55,3 +55,15 @@ it('explains when nothing is configured', function () {
 
     UserModel::class();
 })->throws(InvalidConfiguration::class, 'No ForumKit user model');
+
+it('names users by the configured title attribute, defaulting to name', function () {
+    expect(UserModel::titleAttribute())->toBe('name');
+
+    config(['forumkit.user_title_attribute' => 'username']);
+
+    expect(UserModel::titleAttribute())->toBe('username');
+
+    config(['forumkit.user_title_attribute' => '']);
+
+    expect(UserModel::titleAttribute())->toBe('name');
+});

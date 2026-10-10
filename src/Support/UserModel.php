@@ -52,6 +52,14 @@ final class UserModel
         return self::make()->getTable();
     }
 
+    /**
+     * The attribute that names a user in selects, tables and labels.
+     */
+    public static function titleAttribute(): string
+    {
+        return self::configured('forumkit.user_title_attribute') ?? 'name';
+    }
+
     private static function configured(string $key): ?string
     {
         $value = config($key);
