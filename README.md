@@ -4,7 +4,7 @@ The foundation of the ForumKit packages: a Laravel 13 / Filament 5 plugin provid
 module and navigation registries, user-model and table-prefix resolution, system settings,
 markdown rendering and the `forumkit:doctor` and `forumkit:install` commands.
 
-> Work in progress: `0.x`, nothing released yet.
+> `0.x`: the API may change between minor versions. Not yet on Packagist; install from GitHub.
 
 ## Install
 
