@@ -1,6 +1,6 @@
 {
-    "name": "zencart/forumkit-example",
-    "description": "Template for ForumKit packages.",
+    "name": "zencart/forumkit-core",
+    "description": "ForumKit core: module registry, settings and shared support for the ForumKit Filament packages.",
     "type": "library",
     "license": "MIT",
     "keywords": ["laravel", "filament", "filament-plugin", "forum"],
@@ -17,12 +17,12 @@
     },
     "autoload": {
         "psr-4": {
-            "ForumKit\\Example\\": "src/"
+            "ForumKit\\Core\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "ForumKit\\Example\\Tests\\": "tests/"
+            "ForumKit\\Core\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -33,7 +33,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "ForumKit\\Example\\PackageServiceProvider"
+                "ForumKit\\Core\\CoreServiceProvider"
             ]
         }
     },

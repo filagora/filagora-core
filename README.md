@@ -1,25 +1,27 @@
-# ForumKit Example
+# ForumKit Core
 
-Template for ForumKit packages: a Laravel 13 / Filament 5 plugin with Pest tests,
-Larastan, Pint and shared CI. Create a new package by copying this repository,
-then rename the namespace, package name, config file and plugin id.
+The foundation of the ForumKit packages: a Laravel 13 / Filament 5 plugin providing the
+module and navigation registries, user-model and table-prefix resolution, system settings,
+markdown rendering and the `forumkit:doctor` and `forumkit:install` commands.
+
+> Work in progress: `0.x`, nothing released yet.
 
 ## Install
 
 ```bash
-composer require zencart/forumkit-example
-php artisan vendor:publish --tag=forumkit-example-config
+composer require zencart/forumkit-core
+php artisan vendor:publish --tag=forumkit-config
 ```
 
 Register the plugin on a Filament panel:
 
 ```php
-->plugin(\ForumKit\Example\PackagePlugin::make())
+->plugin(\ForumKit\Core\ForumKitCorePlugin::make())
 ```
 
 ## Configuration
 
-`config/forumkit-example.php` is merged with the host's copy, so list only what
+`config/forumkit.php` is merged with the host's copy, so list only what
 differs. Environment variables are prefixed `FORUMKIT_`.
 
 ## Extending

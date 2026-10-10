@@ -1,2 +1,2 @@
 providers:
-  - ForumKit\Example\PackageServiceProvider
+  - ForumKit\Core\CoreServiceProvider

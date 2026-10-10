@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Example;
+namespace ForumKit\Core;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 
-class PackagePlugin implements Plugin
+class ForumKitCorePlugin implements Plugin
 {
     public static function make(): static
     {
@@ -16,7 +16,7 @@ class PackagePlugin implements Plugin
 
     public function getId(): string
     {
-        return 'forumkit-example';
+        return 'forumkit-core';
     }
 
     public function register(Panel $panel): void

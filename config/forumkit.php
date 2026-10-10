@@ -13,6 +13,6 @@ return [
     | `env()` is only ever used in config files, and config holds no closures.
     |
     */
-    'navigation_group' => env('FORUMKIT_EXAMPLE_NAVIGATION_GROUP', 'Example'),
+    'navigation_group' => env('FORUMKIT_NAVIGATION_GROUP', 'ForumKit'),
 
 ];

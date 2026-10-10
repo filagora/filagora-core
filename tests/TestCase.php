@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Example\Tests;
+namespace ForumKit\Core\Tests;
 
-use ForumKit\Example\PackageServiceProvider;
+use ForumKit\Core\CoreServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
@@ -12,7 +12,7 @@ abstract class TestCase extends Orchestra
     protected function getPackageProviders($app): array
     {
         return [
-            PackageServiceProvider::class,
+            CoreServiceProvider::class,
         ];
     }
 }
