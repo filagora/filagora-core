@@ -34,7 +34,7 @@ class SettingForm
                     ->label(__('forumkit::messages.settings.public'))
                     ->default(false),
                 TextInput::make('value')
-                    ->visible(fn (Get $get): bool => in_array($get('value_type'), [SettingType::String->value, SettingType::Integer->value], true))
+                    ->visible(fn (Get $get): bool => in_array($get('value_type'), [SettingType::String->value, SettingType::Integer->value, SettingType::Page->value], true))
                     ->numeric(fn (Get $get): bool => $get('value_type') === SettingType::Integer->value)
                     ->maxLength(255),
                 Select::make('value')

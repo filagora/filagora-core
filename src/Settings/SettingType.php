@@ -11,6 +11,8 @@ enum SettingType: string
     case Integer = 'integer';
     case Boolean = 'boolean';
     case Json = 'json';
+    /** A route beginning with `/`, or a CMS page slug. Stored and read as a string. */
+    case Page = 'page';
 
     /**
      * Convert a stored string into this type. Null stays null.
@@ -22,7 +24,7 @@ enum SettingType: string
         }
 
         return match ($this) {
-            self::String, self::Text => $stored,
+            self::String, self::Text, self::Page => $stored,
             self::Integer => is_numeric($stored) ? (int) $stored : null,
             self::Boolean => filter_var($stored, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
             self::Json => json_decode($stored, true),

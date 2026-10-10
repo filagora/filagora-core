@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('key', 120)->unique();
             $table->string('label', 160)->nullable();
+            $table->longText('value')->nullable();
             $table->string('value_type', 20)->default('string');
-            $table->text('value')->nullable();
-            $table->boolean('is_public')->default(false);
+            $table->boolean('is_public')->default(false)->index();
             $table->text('description')->nullable();
             $table->timestamps();
         });
