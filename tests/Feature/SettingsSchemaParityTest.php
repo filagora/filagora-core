@@ -3,6 +3,10 @@
 declare(strict_types=1);
 
 use ForumKit\Core\Models\Setting;
+use ForumKit\Core\Schema\Adopter;
+use ForumKit\Core\Schema\AdoptionStatus;
+use ForumKit\Core\Schema\SchemaRegistry;
+use ForumKit\Core\Schema\TableShape;
 use ForumKit\Core\Settings\SettingType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
@@ -64,4 +68,27 @@ it('reads a page setting as a plain string', function () {
     Setting::create(['key' => 'privacy_page', 'value_type' => SettingType::Page, 'value' => '/privacy']);
 
     expect(Setting::where('key', 'privacy_page')->sole()->typedValue())->toBe('/privacy');
+});
+
+it('keeps the shipped snapshot in step with the migration, column order included', function () {
+    $snapshot = app(SchemaRegistry::class)->get('core');
+
+    expect($snapshot)->not->toBeNull()
+        ->and(array_keys($snapshot->tables))->toBe(['system_settings'])
+        ->and(TableShape::inspect('system_settings')->differencesFrom($snapshot->tables['system_settings'], compareColumnOrder: true))->toBe([])
+        ->and($snapshot->migrationNames())->toBe(['2026_10_10_000000_create_forumkit_system_settings_table']);
+});
+
+it('adopts an existing system_settings table that has no prefix', function () {
+    Schema::drop('forumkit_system_settings');
+    config(['forumkit.table_prefix' => '']);
+    (require __DIR__.'/../../database/migrations/2026_10_10_000000_create_forumkit_system_settings_table.php')->up();
+    DB::table('migrations')->where('migration', '2026_10_10_000000_create_forumkit_system_settings_table')->delete();
+
+    $plan = app(Adopter::class)->planFor(app(SchemaRegistry::class)->get('core'));
+
+    expect($plan->status)->toBe(AdoptionStatus::Adoptable, implode('; ', $plan->differences));
+
+    Schema::drop('system_settings');
+    config(['forumkit.table_prefix' => 'forumkit_']);
 });

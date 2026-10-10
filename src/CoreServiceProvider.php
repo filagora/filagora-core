@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace ForumKit\Core;
 
+use ForumKit\Core\Commands\AdoptCommand;
 use ForumKit\Core\Commands\DoctorCommand;
+use ForumKit\Core\Commands\DumpSchemaCommand;
 use ForumKit\Core\Commands\InstallCommand;
 use ForumKit\Core\Content\ExtensionRegistry;
 use ForumKit\Core\Content\MarkdownRenderer;
@@ -19,6 +21,9 @@ use ForumKit\Core\Modules\ModuleRegistry;
 use ForumKit\Core\Navigation\NavigationGroupDefinition;
 use ForumKit\Core\Navigation\NavigationGroupRegistry;
 use ForumKit\Core\Privacy\PrivacyContributorRegistry;
+use ForumKit\Core\Schema\Adopter;
+use ForumKit\Core\Schema\PackageSchema;
+use ForumKit\Core\Schema\SchemaRegistry;
 use ForumKit\Core\Settings\SettingsRegistry;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
@@ -36,6 +41,8 @@ class CoreServiceProvider extends ServiceProvider
         $this->app->singleton(MarkdownRenderer::class);
         $this->app->singleton(PrivacyContributorRegistry::class);
         $this->app->singleton(Doctor::class);
+        $this->app->singleton(SchemaRegistry::class);
+        $this->app->singleton(Adopter::class);
     }
 
     public function boot(): void
@@ -59,6 +66,10 @@ class CoreServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'forumkit');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
+        $this->app->make(SchemaRegistry::class)->register(
+            PackageSchema::fromFile('core', __DIR__.'/../database/schema.php', __DIR__.'/../database/migrations'),
+        );
+
         $doctor = $this->app->make(Doctor::class);
         $doctor->register(new PhpVersionCheck);
         $doctor->register(new UserModelCheck);
@@ -66,7 +77,7 @@ class CoreServiceProvider extends ServiceProvider
         $doctor->register($this->app->make(ModulesCheck::class));
 
         if ($this->app->runningInConsole()) {
-            $this->commands([DoctorCommand::class, InstallCommand::class]);
+            $this->commands([DoctorCommand::class, InstallCommand::class, AdoptCommand::class, DumpSchemaCommand::class]);
 
             $this->publishes([
                 __DIR__.'/../config/forumkit.php' => config_path('forumkit.php'),
