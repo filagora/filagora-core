@@ -31,9 +31,12 @@ Register the plugin on a Filament panel:
 | `MarkdownRenderer` + `ExtensionRegistry` | Safe CommonMark/GFM rendering that packages extend |
 | `PrivacyContributor` | Contract for exporting and erasing a user's data (used by the compliance package) |
 | `Doctor` | Health checks that every package can add to |
+| `SchemaRegistry`, `SchemaExtension` | Table snapshots that `forumkit:adopt` checks, and extensions a profile package uses to declare a site's extra columns, indexes and foreign keys |
 
 Commands: `php artisan forumkit:install` publishes the config, migrates and runs
-`forumkit:doctor`.
+`forumkit:doctor`. `forumkit:adopt` starts a package on a database that already holds its
+tables; `forumkit:schema:dump` and `forumkit:schema:dump-extension` write the snapshots it checks
+(run them after the migrations).
 
 ## Configuration
 
