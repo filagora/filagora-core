@@ -7,6 +7,7 @@ namespace ForumKit\Core;
 use ForumKit\Core\Commands\AdoptCommand;
 use ForumKit\Core\Commands\DoctorCommand;
 use ForumKit\Core\Commands\DumpSchemaCommand;
+use ForumKit\Core\Commands\DumpSchemaExtensionCommand;
 use ForumKit\Core\Commands\InstallCommand;
 use ForumKit\Core\Content\ExtensionRegistry;
 use ForumKit\Core\Content\MarkdownRenderer;
@@ -77,7 +78,7 @@ class CoreServiceProvider extends ServiceProvider
         $doctor->register($this->app->make(ModulesCheck::class));
 
         if ($this->app->runningInConsole()) {
-            $this->commands([DoctorCommand::class, InstallCommand::class, AdoptCommand::class, DumpSchemaCommand::class]);
+            $this->commands([DoctorCommand::class, InstallCommand::class, AdoptCommand::class, DumpSchemaCommand::class, DumpSchemaExtensionCommand::class]);
 
             $this->publishes([
                 __DIR__.'/../config/forumkit.php' => config_path('forumkit.php'),

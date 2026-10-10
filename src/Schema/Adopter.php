@@ -38,6 +38,7 @@ final class Adopter
 
     public function planFor(PackageSchema $schema): AdoptionPlan
     {
+        $schema = $schema->extendedBy($this->registry->extensionsFor($schema->module));
         $pending = $this->pendingMigrations($schema);
         $existing = array_values(array_filter(
             array_keys($schema->tables),

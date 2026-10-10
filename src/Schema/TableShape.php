@@ -14,8 +14,9 @@ use Illuminate\Support\Facades\Schema;
  * foreign key names, references to the host's users table become `{users}`, integer
  * display widths are dropped, and defaults lose their quoting.
  *
- * @phpstan-type Column array{type: string, nullable: bool, default: string|null, collation: string|null, auto_increment: bool}
- * @phpstan-type Index array{columns: list<string>, unique: bool, primary: bool}
+ * @phpstan-type Generation array{type: string, expression: string}
+ * @phpstan-type Column array{type: string, nullable: bool, default: string|null, collation: string|null, auto_increment: bool, generation?: Generation|null}
+ * @phpstan-type Index array{columns: list<string>, unique: bool, primary: bool, type?: string}
  * @phpstan-type ForeignKey array{columns: list<string>, on: string, foreign_columns: list<string>, on_delete: string, on_update: string}
  */
 final readonly class TableShape
@@ -33,11 +34,17 @@ final readonly class TableShape
 
     /**
      * Describe an existing table. Pass the base name; the configured prefix is applied.
+     *
+     * @throws \InvalidArgumentException When the table does not exist.
      */
     public static function inspect(string $baseName): self
     {
         $table = Tables::name($baseName);
         $prefix = Tables::name('');
+
+        if (! Schema::hasTable($table)) {
+            throw new \InvalidArgumentException("Table [{$table}] does not exist, so its shape cannot be read.");
+        }
 
         $columns = [];
 
@@ -48,6 +55,7 @@ final readonly class TableShape
                 'default' => self::normaliseDefault($column['default']),
                 'collation' => $column['collation'],
                 'auto_increment' => $column['auto_increment'],
+                'generation' => self::normaliseGeneration($column['generation'] ?? null),
             ];
         }
 
@@ -58,6 +66,7 @@ final readonly class TableShape
                 'columns' => $index['columns'],
                 'unique' => $index['unique'],
                 'primary' => $index['primary'],
+                'type' => strtolower((string) $index['type']),
             ];
         }
 
@@ -95,6 +104,44 @@ final readonly class TableShape
     public function toArray(): array
     {
         return ['columns' => $this->columns, 'indexes' => $this->indexes, 'foreign_keys' => $this->foreignKeys];
+    }
+
+    /**
+     * This shape plus declared extras (columns, indexes and foreign keys a profile package adds
+     * to a table it does not own). Declaring something the shape already has is an error, so an
+     * extension can never silently redefine a package's own column.
+     *
+     * @param  array{columns?: array<string, Column>, indexes?: array<string, Index>, foreign_keys?: array<string, ForeignKey>}  $extras
+     */
+    public function withExtras(array $extras): self
+    {
+        $merged = ['columns' => $this->columns, 'indexes' => $this->indexes, 'foreign_keys' => $this->foreignKeys];
+
+        foreach (['columns', 'indexes', 'foreign_keys'] as $kind) {
+            foreach ($extras[$kind] ?? [] as $name => $definition) {
+                if (isset($merged[$kind][$name])) {
+                    throw new \InvalidArgumentException("Schema extension redefines existing {$kind} entry [{$name}].");
+                }
+
+                $merged[$kind][$name] = $definition;
+            }
+        }
+
+        return new self($merged['columns'], $merged['indexes'], $merged['foreign_keys']);
+    }
+
+    /**
+     * What this shape has beyond a base shape: the declared-extras form `withExtras()` takes.
+     *
+     * @return array{columns: array<string, Column>, indexes: array<string, Index>, foreign_keys: array<string, ForeignKey>}
+     */
+    public function extrasOver(self $base): array
+    {
+        return [
+            'columns' => array_diff_key($this->columns, $base->columns),
+            'indexes' => array_diff_key($this->indexes, $base->indexes),
+            'foreign_keys' => array_diff_key($this->foreignKeys, $base->foreignKeys),
+        ];
     }
 
     /**
@@ -178,7 +225,8 @@ final readonly class TableShape
         return match (true) {
             $value === null => 'null',
             is_bool($value) => $value ? 'true' : 'false',
-            is_array($value) => '['.implode(', ', array_map(self::show(...), $value)).']',
+            is_array($value) && array_is_list($value) => '['.implode(', ', array_map(self::show(...), $value)).']',
+            is_array($value) => (string) json_encode($value),
             default => (string) $value,
         };
     }
@@ -196,6 +244,27 @@ final readonly class TableShape
         }
 
         return (string) preg_replace('/^((?:tiny|small|medium|big)?int)\(\d+\)/', '$1', $type);
+    }
+
+    /**
+     * Generated columns compare by kind and expression. The expression is lower-cased with
+     * backticks and extra whitespace removed, since servers quote it differently.
+     *
+     * @param  array{type?: string|null, expression?: string|null}|null  $generation
+     * @return Generation|null
+     */
+    private static function normaliseGeneration(?array $generation): ?array
+    {
+        if ($generation === null || ($generation['expression'] ?? null) === null) {
+            return null;
+        }
+
+        $expression = strtolower(str_replace('`', '', (string) $generation['expression']));
+
+        return [
+            'type' => strtolower((string) ($generation['type'] ?? 'virtual')),
+            'expression' => trim((string) preg_replace('/\s+/', ' ', $expression)),
+        ];
     }
 
     private static function normaliseDefault(mixed $default): ?string

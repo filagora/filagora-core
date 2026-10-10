@@ -17,6 +17,7 @@ return [
                     'default' => null,
                     'collation' => null,
                     'auto_increment' => true,
+                    'generation' => null,
                 ],
                 'key' => [
                     'type' => 'varchar(120)',
@@ -24,6 +25,7 @@ return [
                     'default' => null,
                     'collation' => 'utf8mb4_unicode_ci',
                     'auto_increment' => false,
+                    'generation' => null,
                 ],
                 'label' => [
                     'type' => 'varchar(160)',
@@ -31,6 +33,7 @@ return [
                     'default' => null,
                     'collation' => 'utf8mb4_unicode_ci',
                     'auto_increment' => false,
+                    'generation' => null,
                 ],
                 'value' => [
                     'type' => 'longtext',
@@ -38,6 +41,7 @@ return [
                     'default' => null,
                     'collation' => 'utf8mb4_unicode_ci',
                     'auto_increment' => false,
+                    'generation' => null,
                 ],
                 'value_type' => [
                     'type' => 'varchar(20)',
@@ -45,6 +49,7 @@ return [
                     'default' => 'string',
                     'collation' => 'utf8mb4_unicode_ci',
                     'auto_increment' => false,
+                    'generation' => null,
                 ],
                 'is_public' => [
                     'type' => 'tinyint(1)',
@@ -52,6 +57,7 @@ return [
                     'default' => '0',
                     'collation' => null,
                     'auto_increment' => false,
+                    'generation' => null,
                 ],
                 'description' => [
                     'type' => 'text',
@@ -59,6 +65,7 @@ return [
                     'default' => null,
                     'collation' => 'utf8mb4_unicode_ci',
                     'auto_increment' => false,
+                    'generation' => null,
                 ],
                 'created_at' => [
                     'type' => 'timestamp',
@@ -66,6 +73,7 @@ return [
                     'default' => null,
                     'collation' => null,
                     'auto_increment' => false,
+                    'generation' => null,
                 ],
                 'updated_at' => [
                     'type' => 'timestamp',
@@ -73,6 +81,7 @@ return [
                     'default' => null,
                     'collation' => null,
                     'auto_increment' => false,
+                    'generation' => null,
                 ],
             ],
             'indexes' => [
@@ -82,6 +91,7 @@ return [
                     ],
                     'unique' => true,
                     'primary' => true,
+                    'type' => 'btree',
                 ],
                 'system_settings_is_public_index' => [
                     'columns' => [
@@ -89,6 +99,7 @@ return [
                     ],
                     'unique' => false,
                     'primary' => false,
+                    'type' => 'btree',
                 ],
                 'system_settings_key_unique' => [
                     'columns' => [
@@ -96,6 +107,7 @@ return [
                     ],
                     'unique' => true,
                     'primary' => false,
+                    'type' => 'btree',
                 ],
             ],
             'foreign_keys' => [],

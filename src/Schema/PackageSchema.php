@@ -18,11 +18,13 @@ final readonly class PackageSchema
 {
     /**
      * @param  array<string, TableShape>  $tables  Keyed by base table name (no prefix).
+     * @param  list<string>  $extraMigrations  Migration names contributed by schema extensions.
      */
     public function __construct(
         public string $module,
         public array $tables,
         public string $migrationsPath,
+        public array $extraMigrations = [],
     ) {}
 
     /**
@@ -55,6 +57,35 @@ final readonly class PackageSchema
         $files = glob(rtrim($this->migrationsPath, '/').'/*.php') ?: [];
         sort($files);
 
-        return array_map(fn (string $file): string => basename($file, '.php'), $files);
+        return array_values(array_unique([
+            ...array_map(fn (string $file): string => basename($file, '.php'), $files),
+            ...$this->extraMigrations,
+        ]));
+    }
+
+    /**
+     * This schema with extensions applied: their extras added to the tables they name, and their
+     * migrations counted as the package's own.
+     *
+     * @param  list<SchemaExtension>  $extensions
+     */
+    public function extendedBy(array $extensions): self
+    {
+        $tables = $this->tables;
+        $migrations = $this->extraMigrations;
+
+        foreach ($extensions as $extension) {
+            foreach ($extension->tables as $base => $extras) {
+                if (! isset($tables[$base])) {
+                    throw new InvalidArgumentException("Schema extension [{$extension->name}] extends table [{$base}], which module [{$this->module}] does not own.");
+                }
+
+                $tables[$base] = $tables[$base]->withExtras($extras);
+            }
+
+            $migrations = [...$migrations, ...$extension->migrationNames()];
+        }
+
+        return new self($this->module, $tables, $this->migrationsPath, array_values(array_unique($migrations)));
     }
 }

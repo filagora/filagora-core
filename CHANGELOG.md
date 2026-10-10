@@ -5,6 +5,18 @@ All notable changes to this package are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-10-10
+
+### Added
+
+- Schema extensions: `SchemaExtension` and `SchemaRegistry::extend()` let a profile package declare extra columns, indexes and foreign keys that a site's tables carry beyond a package's own snapshot, plus the migrations that create them. `forumkit:adopt` checks the package snapshot and every registered extension exactly, and still reports anything undeclared as unexpected. Extensions for modules that are not installed are ignored; redefining a column the package owns is an error.
+- `forumkit:schema:dump-extension`: writes only what a table has beyond a package's snapshot, in the form `SchemaExtension::fromFile()` loads.
+
+### Changed
+
+- `TableShape` now compares generated columns (kind and expression) and the index type (`FULLTEXT` versus `BTREE`). Snapshots written by `0.1.0` stay valid; new snapshots record both. Core's own snapshot was regenerated.
+- `TableShape::inspect()` and the dump commands now fail with a clear message when the table does not exist, instead of describing an empty table.
+
 ## [0.1.0] - 2026-10-10
 
 First release. The API may change between `0.x` minor versions.
