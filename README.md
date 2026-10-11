@@ -9,7 +9,7 @@ markdown rendering and the `forumkit:doctor` and `forumkit:install` commands.
 ## Install
 
 ```bash
-composer require zencart/forumkit-core
+composer require zcwilt/forumkit-core
 php artisan vendor:publish --tag=forumkit-config
 ```
 
