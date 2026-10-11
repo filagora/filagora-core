@@ -5,6 +5,12 @@ All notable changes to this package are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-10-11
+
+### Changed
+
+- **The Composer package is now `zcwilt/forumkit-core`** (it was `zencart/forumkit-core`), matching the GitHub owner. Change your `composer.json` requirement to `zcwilt/forumkit-core`; the code, the `ForumKit\Core\` namespace and the API are unchanged. The old `zencart/forumkit-core` package is abandoned.
+
 ## [0.1.1] - 2026-10-10
 
 ### Added

@@ -49,7 +49,7 @@ class CoreServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->app->make(ModuleRegistry::class)->register(
-            new Module('core', 'ForumKit Core', 'zencart/forumkit-core'),
+            new Module('core', 'ForumKit Core', 'zcwilt/forumkit-core'),
         );
 
         $this->app->make(NavigationGroupRegistry::class)->register(

@@ -35,7 +35,7 @@ it('fails when the user model cannot be resolved', function () {
 });
 
 it('fails when a registered module needs one that is not installed', function () {
-    app(ModuleRegistry::class)->register(new Module('forums', 'Forums', 'zencart/forumkit-forums', requires: ['entitlements']));
+    app(ModuleRegistry::class)->register(new Module('forums', 'Forums', 'zcwilt/forumkit-forums', requires: ['entitlements']));
 
     $this->artisan('forumkit:doctor')
         ->expectsOutputToContain('forums needs entitlements')

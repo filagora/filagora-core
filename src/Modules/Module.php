@@ -11,7 +11,7 @@ final readonly class Module
 {
     /**
      * @param  string  $id  Short unique id, for example `entitlements`.
-     * @param  string  $package  Composer package name, for example `zencart/forumkit-entitlements`.
+     * @param  string  $package  Composer package name, for example `zcwilt/forumkit-entitlements`.
      * @param  list<string>  $requires  Ids of modules this one needs.
      */
     public function __construct(

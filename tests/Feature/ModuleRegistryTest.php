@@ -10,7 +10,7 @@ it('registers core itself', function () {
     $registry = app(ModuleRegistry::class);
 
     expect($registry->has('core'))->toBeTrue()
-        ->and($registry->get('core')->package)->toBe('zencart/forumkit-core');
+        ->and($registry->get('core')->package)->toBe('zcwilt/forumkit-core');
 });
 
 it('is a singleton', function () {
@@ -19,12 +19,12 @@ it('is a singleton', function () {
 
 it('reports requirements that are not installed', function () {
     $registry = new ModuleRegistry;
-    $registry->register(new Module('core', 'Core', 'zencart/forumkit-core'));
-    $registry->register(new Module('forums', 'Forums', 'zencart/forumkit-forums', requires: ['core', 'entitlements']));
+    $registry->register(new Module('core', 'Core', 'zcwilt/forumkit-core'));
+    $registry->register(new Module('forums', 'Forums', 'zcwilt/forumkit-forums', requires: ['core', 'entitlements']));
 
     expect($registry->missingRequirements())->toBe(['forums' => ['entitlements']]);
 
-    $registry->register(new Module('entitlements', 'Entitlements', 'zencart/forumkit-entitlements', requires: ['core']));
+    $registry->register(new Module('entitlements', 'Entitlements', 'zcwilt/forumkit-entitlements', requires: ['core']));
 
     expect($registry->missingRequirements())->toBe([]);
 });

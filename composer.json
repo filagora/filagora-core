@@ -1,5 +1,5 @@
 {
-    "name": "zencart/forumkit-core",
+    "name": "zcwilt/forumkit-core",
     "description": "ForumKit core: module registry, settings and shared support for the ForumKit Filament packages.",
     "type": "library",
     "license": "MIT",
