@@ -14,24 +14,24 @@ use Illuminate\Support\Facades\Schema;
  * Resolution order: a stored row, then the definition's default, then the
  * caller's fallback. Values are memoised for the life of the registry and
  * dropped when a setting changes. Register as `scoped`, so long-lived workers
- * never carry values between requests.
+ * never carry values between requests; the definitions live in a separate singleton
+ * (`SettingDefinitions`) so they survive that reset.
  */
 final class SettingsRegistry
 {
-    /** @var array<string, SettingDefinition> */
-    private array $definitions = [];
-
     /** @var array<string, mixed> */
     private array $memo = [];
 
+    public function __construct(private readonly SettingDefinitions $definitions) {}
+
     public function define(SettingDefinition $definition): void
     {
-        $this->definitions[$definition->key] = $definition;
+        $this->definitions->define($definition);
     }
 
     public function definition(string $key): ?SettingDefinition
     {
-        return $this->definitions[$key] ?? null;
+        return $this->definitions->get($key);
     }
 
     /**
@@ -39,7 +39,7 @@ final class SettingsRegistry
      */
     public function definitions(): array
     {
-        return $this->definitions;
+        return $this->definitions->all();
     }
 
     public function get(string $key, mixed $default = null): mixed

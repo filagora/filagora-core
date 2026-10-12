@@ -105,3 +105,24 @@ it('lets a host swap the model class', function () {
 
     expect(Models::class('setting'))->toBe(Setting::class);
 });
+
+it('keeps the declared definitions when the request scope is reset, as a queue worker does between jobs', function () {
+    settings()->define(new SettingDefinition('worker.key', SettingType::Integer, 7));
+
+    expect(settings()->integer('worker.key'))->toBe(7);
+
+    Setting::create(['key' => 'worker.key', 'value_type' => 'integer', 'value' => '9']);
+    expect(settings()->integer('worker.key'))->toBe(9);
+
+    app()->forgetScopedInstances();
+
+    // The memo is gone (a new scope reads the database again) but the definition is not.
+    expect(settings()->definition('worker.key'))->not->toBeNull()
+        ->and(settings()->integer('worker.key'))->toBe(9);
+
+    Setting::where('key', 'worker.key')->delete();
+    app()->forgetScopedInstances();
+
+    expect(settings()->integer('worker.key'))->toBe(7)
+        ->and(array_keys(settings()->definitions()))->toBe(['worker.key']);
+});

@@ -5,6 +5,12 @@ All notable changes to this package are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-10-12
+
+### Fixed
+
+- **Settings definitions were lost between jobs in a long-lived queue worker.** `SettingsRegistry` is bound per request scope (so its value memo does not leak between requests), and the definitions packages declare at boot lived in it, so a worker lost every declared default after its first job. Definitions now live in a separate singleton (`SettingDefinitions`); the registry's API is unchanged.
+
 ## [0.1.2] - 2026-10-11
 
 ### Changed
