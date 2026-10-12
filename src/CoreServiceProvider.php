@@ -25,6 +25,7 @@ use ForumKit\Core\Privacy\PrivacyContributorRegistry;
 use ForumKit\Core\Schema\Adopter;
 use ForumKit\Core\Schema\PackageSchema;
 use ForumKit\Core\Schema\SchemaRegistry;
+use ForumKit\Core\Settings\SettingDefinitions;
 use ForumKit\Core\Settings\SettingsRegistry;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
@@ -37,6 +38,7 @@ class CoreServiceProvider extends ServiceProvider
 
         $this->app->singleton(ModuleRegistry::class);
         $this->app->singleton(NavigationGroupRegistry::class);
+        $this->app->singleton(SettingDefinitions::class);
         $this->app->scoped(SettingsRegistry::class);
         $this->app->singleton(ExtensionRegistry::class);
         $this->app->singleton(MarkdownRenderer::class);
