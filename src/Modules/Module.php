@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Modules;
+namespace Filagora\Core\Modules;
 
 /**
- * One installed ForumKit package, as declared by its service provider.
+ * One installed Filagora package, as declared by its service provider.
  */
 final readonly class Module
 {
     /**
      * @param  string  $id  Short unique id, for example `entitlements`.
-     * @param  string  $package  Composer package name, for example `zcwilt/forumkit-entitlements`.
+     * @param  string  $package  Composer package name, for example `filagora/filagora-entitlements`.
      * @param  list<string>  $requires  Ids of modules this one needs.
      */
     public function __construct(

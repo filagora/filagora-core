@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Content;
+namespace Filagora\Core\Content;
 
-use ForumKit\Core\Contracts\HtmlTransformer;
+use Filagora\Core\Contracts\HtmlTransformer;
 use League\CommonMark\Extension\ExtensionInterface;
 
 /**

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Content;
+namespace Filagora\Core\Content;
 
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
@@ -15,7 +15,7 @@ use League\CommonMark\MarkdownConverter;
  * extensions, raw HTML escaped, unsafe link schemes dropped, and external links
  * marked. Packages extend it through the ExtensionRegistry.
  *
- * Options come from `forumkit.markdown`: `line_breaks` (a single newline becomes
+ * Options come from `filagora.markdown`: `line_breaks` (a single newline becomes
  * a visible break), `max_nesting_level` and `internal_hosts` (hosts treated as
  * internal; the app URL's host is always included).
  */
@@ -56,8 +56,8 @@ final class MarkdownRenderer
 
     private function build(): MarkdownConverter
     {
-        $lineBreaks = (bool) config('forumkit.markdown.line_breaks', true);
-        $nesting = config('forumkit.markdown.max_nesting_level', 100);
+        $lineBreaks = (bool) config('filagora.markdown.line_breaks', true);
+        $nesting = config('filagora.markdown.max_nesting_level', 100);
 
         $environment = new Environment([
             'html_input' => 'escape',
@@ -90,7 +90,7 @@ final class MarkdownRenderer
      */
     private function internalHosts(): array
     {
-        $hosts = config('forumkit.markdown.internal_hosts', []);
+        $hosts = config('filagora.markdown.internal_hosts', []);
         $hosts = is_array($hosts) ? array_values(array_filter($hosts, 'is_string')) : [];
 
         $appHost = parse_url((string) config('app.url'), PHP_URL_HOST);

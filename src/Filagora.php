@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core;
+namespace Filagora\Core;
 
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Entry point for host applications to adjust ForumKit at boot time.
+ * Entry point for host applications to adjust Filagora at boot time.
  */
-final class ForumKit
+final class Filagora
 {
     /** @var class-string<Model>|null */
     private static ?string $userModel = null;
@@ -25,11 +25,11 @@ final class ForumKit
     }
 
     /**
-     * The table prefix applied to every ForumKit table.
+     * The table prefix applied to every Filagora table.
      */
     public static function tablePrefix(): string
     {
-        $prefix = config('forumkit.table_prefix', 'forumkit_');
+        $prefix = config('filagora.table_prefix', 'filagora_');
 
         return is_string($prefix) ? $prefix : '';
     }

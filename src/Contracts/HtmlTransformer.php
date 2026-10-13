@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Contracts;
+namespace Filagora\Core\Contracts;
 
 /**
  * A step that rewrites the HTML produced by the markdown renderer. Packages use

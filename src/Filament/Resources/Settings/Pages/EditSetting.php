@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Filament\Resources\Settings\Pages;
+namespace Filagora\Core\Filament\Resources\Settings\Pages;
 
+use Filagora\Core\Filament\Resources\Settings\SettingResource;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
-use ForumKit\Core\Filament\Resources\Settings\SettingResource;
 
 class EditSetting extends EditRecord
 {

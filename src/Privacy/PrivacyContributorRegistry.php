@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Privacy;
+namespace Filagora\Core\Privacy;
 
-use ForumKit\Core\Contracts\PrivacyContributor;
+use Filagora\Core\Contracts\PrivacyContributor;
 
 final class PrivacyContributorRegistry
 {

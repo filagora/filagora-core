@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Doctor\Checks;
+namespace Filagora\Core\Doctor\Checks;
 
-use ForumKit\Core\Contracts\DoctorCheck;
-use ForumKit\Core\Doctor\CheckResult;
+use Filagora\Core\Contracts\DoctorCheck;
+use Filagora\Core\Doctor\CheckResult;
 
 final class PhpVersionCheck implements DoctorCheck
 {

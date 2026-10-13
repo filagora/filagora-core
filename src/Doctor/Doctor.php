@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Doctor;
+namespace Filagora\Core\Doctor;
 
-use ForumKit\Core\Contracts\DoctorCheck;
+use Filagora\Core\Contracts\DoctorCheck;
 use Throwable;
 
 /**
- * The checks run by `forumkit:doctor`. Core registers its own; every other
+ * The checks run by `filagora:doctor`. Core registers its own; every other
  * package registers the checks for what it needs.
  */
 final class Doctor

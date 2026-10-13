@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use ForumKit\Core\Schema\Adopter;
-use ForumKit\Core\Schema\AdoptionStatus;
-use ForumKit\Core\Schema\PackageSchema;
-use ForumKit\Core\Schema\SchemaExtension;
-use ForumKit\Core\Schema\SchemaRegistry;
-use ForumKit\Core\Schema\TableShape;
-use ForumKit\Core\Support\Tables;
-use ForumKit\Core\Support\UserModel;
+use Filagora\Core\Schema\Adopter;
+use Filagora\Core\Schema\AdoptionStatus;
+use Filagora\Core\Schema\PackageSchema;
+use Filagora\Core\Schema\SchemaExtension;
+use Filagora\Core\Schema\SchemaRegistry;
+use Filagora\Core\Schema\TableShape;
+use Filagora\Core\Support\Tables;
+use Filagora\Core\Support\UserModel;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
@@ -52,7 +52,7 @@ function addSiteExtras(): void
 
 function gadgetsPackage(): PackageSchema
 {
-    $dir = sys_get_temp_dir().'/forumkit-ext-'.uniqid();
+    $dir = sys_get_temp_dir().'/filagora-ext-'.uniqid();
     File::makeDirectory($dir);
     File::put($dir.'/2026_01_01_000001_create_gadgets_table.php', '<?php');
 
@@ -64,15 +64,15 @@ function gadgetsPackage(): PackageSchema
 
 function siteExtensionFile(): string
 {
-    $path = sys_get_temp_dir().'/forumkit-ext-snapshot-'.uniqid().'.php';
-    test()->artisan('forumkit:schema:dump-extension', ['module' => 'gadgets', 'tables' => ['gadgets'], '--path' => $path])->assertExitCode(0);
+    $path = sys_get_temp_dir().'/filagora-ext-snapshot-'.uniqid().'.php';
+    test()->artisan('filagora:schema:dump-extension', ['module' => 'gadgets', 'tables' => ['gadgets'], '--path' => $path])->assertExitCode(0);
 
     return $path;
 }
 
 function siteMigrations(): string
 {
-    $dir = sys_get_temp_dir().'/forumkit-site-migrations-'.uniqid();
+    $dir = sys_get_temp_dir().'/filagora-site-migrations-'.uniqid();
     File::makeDirectory($dir);
     File::put($dir.'/2026_02_01_000001_add_site_columns_to_gadgets.php', '<?php');
 
@@ -184,7 +184,7 @@ it('adopts a table whose extras are declared by an extension, exactly', function
     expect($plan->status)->toBe(AdoptionStatus::Adoptable, implode('; ', $plan->differences))
         ->and($plan->pendingMigrations)->toBe(['2026_01_01_000001_create_gadgets_table', '2026_02_01_000001_add_site_columns_to_gadgets']);
 
-    $this->artisan('forumkit:adopt')->expectsOutputToContain('Recorded 2 migration(s) as run.')->assertExitCode(0);
+    $this->artisan('filagora:adopt')->expectsOutputToContain('Recorded 2 migration(s) as run.')->assertExitCode(0);
 
     expect(app(Adopter::class)->planFor($this->package)->status)->toBe(AdoptionStatus::AlreadyAdopted);
 });
@@ -253,19 +253,19 @@ it('dumps only what the table has beyond the package, and the file loads back', 
 });
 
 it('dumps nothing for a table that matches the package, and refuses unknown modules and tables', function () {
-    $path = sys_get_temp_dir().'/forumkit-empty-'.uniqid().'.php';
+    $path = sys_get_temp_dir().'/filagora-empty-'.uniqid().'.php';
 
-    $this->artisan('forumkit:schema:dump-extension', ['module' => 'gadgets', 'tables' => ['gadgets'], '--path' => $path])->assertExitCode(0);
+    $this->artisan('filagora:schema:dump-extension', ['module' => 'gadgets', 'tables' => ['gadgets'], '--path' => $path])->assertExitCode(0);
     expect(SchemaExtension::fromFile('site', 'gadgets', $path)->tables)->toBe([]);
 
-    $this->artisan('forumkit:schema:dump-extension', ['module' => 'nope', 'tables' => ['gadgets']])
+    $this->artisan('filagora:schema:dump-extension', ['module' => 'nope', 'tables' => ['gadgets']])
         ->expectsOutputToContain('No schema snapshot is registered for module [nope].')->assertExitCode(1);
-    $this->artisan('forumkit:schema:dump-extension', ['module' => 'gadgets', 'tables' => ['elsewhere']])
+    $this->artisan('filagora:schema:dump-extension', ['module' => 'gadgets', 'tables' => ['elsewhere']])
         ->expectsOutputToContain('Module [gadgets] does not own table [elsewhere].')->assertExitCode(1);
 });
 
 it('rejects an extension file that does not return tables', function () {
-    $path = sys_get_temp_dir().'/forumkit-bad-ext-'.uniqid().'.php';
+    $path = sys_get_temp_dir().'/filagora-bad-ext-'.uniqid().'.php';
     File::put($path, '<?php return [];');
 
     SchemaExtension::fromFile('site', 'gadgets', $path);
@@ -273,14 +273,14 @@ it('rejects an extension file that does not return tables', function () {
 
 it('fails loudly, instead of describing nothing, when a table does not exist', function () {
     expect(fn () => TableShape::inspect('no_such_table'))
-        ->toThrow(InvalidArgumentException::class, 'Table [forumkit_no_such_table] does not exist');
+        ->toThrow(InvalidArgumentException::class, 'Table [filagora_no_such_table] does not exist');
 
-    $this->artisan('forumkit:schema:dump', ['tables' => ['no_such_table']])
+    $this->artisan('filagora:schema:dump', ['tables' => ['no_such_table']])
         ->expectsOutputToContain('does not exist')->assertExitCode(1);
 
     Schema::drop(Tables::name('gadgets'));
 
-    $this->artisan('forumkit:schema:dump-extension', ['module' => 'gadgets', 'tables' => ['gadgets']])
+    $this->artisan('filagora:schema:dump-extension', ['module' => 'gadgets', 'tables' => ['gadgets']])
         ->expectsOutputToContain('Run the migrations first.')->assertExitCode(1);
 
     createGadgets();

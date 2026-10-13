@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use ForumKit\Core\Support\Tables;
-use ForumKit\Core\Support\UserKey;
+use Filagora\Core\Support\Tables;
+use Filagora\Core\Support\UserKey;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 

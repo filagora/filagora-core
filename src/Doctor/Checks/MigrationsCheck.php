@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Doctor\Checks;
+namespace Filagora\Core\Doctor\Checks;
 
-use ForumKit\Core\Contracts\DoctorCheck;
-use ForumKit\Core\Doctor\CheckResult;
-use ForumKit\Core\ForumKit;
-use ForumKit\Core\Support\Tables;
+use Filagora\Core\Contracts\DoctorCheck;
+use Filagora\Core\Doctor\CheckResult;
+use Filagora\Core\Filagora;
+use Filagora\Core\Support\Tables;
 use Illuminate\Support\Facades\Schema;
 
 final class MigrationsCheck implements DoctorCheck
@@ -20,7 +20,7 @@ final class MigrationsCheck implements DoctorCheck
             return CheckResult::fail('Migrations', "Table [{$table}] is missing. Run `php artisan migrate`.");
         }
 
-        $prefix = ForumKit::tablePrefix();
+        $prefix = Filagora::tablePrefix();
 
         return CheckResult::pass('Migrations', $prefix === '' ? 'Core tables present (no table prefix)' : "Core tables present (prefix {$prefix})");
     }

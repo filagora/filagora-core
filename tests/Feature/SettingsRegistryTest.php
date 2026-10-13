@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use ForumKit\Core\Events\SettingChanged;
-use ForumKit\Core\Models\Setting;
-use ForumKit\Core\Settings\SettingDefinition;
-use ForumKit\Core\Settings\SettingsRegistry;
-use ForumKit\Core\Settings\SettingType;
-use ForumKit\Core\Support\Models;
+use Filagora\Core\Events\SettingChanged;
+use Filagora\Core\Models\Setting;
+use Filagora\Core\Settings\SettingDefinition;
+use Filagora\Core\Settings\SettingsRegistry;
+use Filagora\Core\Settings\SettingType;
+use Filagora\Core\Support\Models;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 
@@ -24,9 +24,9 @@ it('falls back to the caller default when nothing is defined or stored', functio
 });
 
 it('uses the definition default until a row exists', function () {
-    settings()->define(new SettingDefinition('site.name', default: 'ForumKit'));
+    settings()->define(new SettingDefinition('site.name', default: 'Filagora'));
 
-    expect(settings()->string('site.name'))->toBe('ForumKit');
+    expect(settings()->string('site.name'))->toBe('Filagora');
 
     Setting::create(['key' => 'site.name', 'value_type' => 'string', 'value' => 'My Forum']);
     settings()->flush();
@@ -90,7 +90,7 @@ it('dispatches SettingChanged on save and delete', function () {
 });
 
 it('uses the prefixed table and honours an empty prefix name', function () {
-    expect((new Setting)->getTable())->toBe('forumkit_system_settings');
+    expect((new Setting)->getTable())->toBe('filagora_system_settings');
 });
 
 it('scopes public settings', function () {
@@ -101,7 +101,7 @@ it('scopes public settings', function () {
 });
 
 it('lets a host swap the model class', function () {
-    config(['forumkit.models.setting' => Setting::class]);
+    config(['filagora.models.setting' => Setting::class]);
 
     expect(Models::class('setting'))->toBe(Setting::class);
 });

@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Tests;
+namespace Filagora\Core\Tests;
 
 use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
 use BladeUI\Icons\BladeIconsServiceProvider;
+use Filagora\Core\CoreServiceProvider;
+use Filagora\Core\Tests\Support\TestPanelProvider;
 use Filament\Actions\ActionsServiceProvider;
 use Filament\FilamentServiceProvider;
 use Filament\Forms\FormsServiceProvider;
@@ -15,8 +17,6 @@ use Filament\Schemas\SchemasServiceProvider;
 use Filament\Support\SupportServiceProvider;
 use Filament\Tables\TablesServiceProvider;
 use Filament\Widgets\WidgetsServiceProvider;
-use ForumKit\Core\CoreServiceProvider;
-use ForumKit\Core\Tests\Support\TestPanelProvider;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 

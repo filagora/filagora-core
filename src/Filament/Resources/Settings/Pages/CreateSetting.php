@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Filament\Resources\Settings\Pages;
+namespace Filagora\Core\Filament\Resources\Settings\Pages;
 
+use Filagora\Core\Filament\Resources\Settings\SettingResource;
 use Filament\Resources\Pages\CreateRecord;
-use ForumKit\Core\Filament\Resources\Settings\SettingResource;
 
 class CreateSetting extends CreateRecord
 {

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Doctor\Checks;
+namespace Filagora\Core\Doctor\Checks;
 
-use ForumKit\Core\Contracts\DoctorCheck;
-use ForumKit\Core\Doctor\CheckResult;
-use ForumKit\Core\Exceptions\InvalidConfiguration;
-use ForumKit\Core\Support\UserModel;
+use Filagora\Core\Contracts\DoctorCheck;
+use Filagora\Core\Doctor\CheckResult;
+use Filagora\Core\Exceptions\InvalidConfiguration;
+use Filagora\Core\Support\UserModel;
 use Illuminate\Support\Facades\Schema;
 
 final class UserModelCheck implements DoctorCheck

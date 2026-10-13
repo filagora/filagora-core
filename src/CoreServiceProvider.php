@@ -2,31 +2,31 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core;
+namespace Filagora\Core;
 
-use ForumKit\Core\Commands\AdoptCommand;
-use ForumKit\Core\Commands\DoctorCommand;
-use ForumKit\Core\Commands\DumpSchemaCommand;
-use ForumKit\Core\Commands\DumpSchemaExtensionCommand;
-use ForumKit\Core\Commands\InstallCommand;
-use ForumKit\Core\Content\ExtensionRegistry;
-use ForumKit\Core\Content\MarkdownRenderer;
-use ForumKit\Core\Doctor\Checks\MigrationsCheck;
-use ForumKit\Core\Doctor\Checks\ModulesCheck;
-use ForumKit\Core\Doctor\Checks\PhpVersionCheck;
-use ForumKit\Core\Doctor\Checks\UserModelCheck;
-use ForumKit\Core\Doctor\Doctor;
-use ForumKit\Core\Events\SettingChanged;
-use ForumKit\Core\Modules\Module;
-use ForumKit\Core\Modules\ModuleRegistry;
-use ForumKit\Core\Navigation\NavigationGroupDefinition;
-use ForumKit\Core\Navigation\NavigationGroupRegistry;
-use ForumKit\Core\Privacy\PrivacyContributorRegistry;
-use ForumKit\Core\Schema\Adopter;
-use ForumKit\Core\Schema\PackageSchema;
-use ForumKit\Core\Schema\SchemaRegistry;
-use ForumKit\Core\Settings\SettingDefinitions;
-use ForumKit\Core\Settings\SettingsRegistry;
+use Filagora\Core\Commands\AdoptCommand;
+use Filagora\Core\Commands\DoctorCommand;
+use Filagora\Core\Commands\DumpSchemaCommand;
+use Filagora\Core\Commands\DumpSchemaExtensionCommand;
+use Filagora\Core\Commands\InstallCommand;
+use Filagora\Core\Content\ExtensionRegistry;
+use Filagora\Core\Content\MarkdownRenderer;
+use Filagora\Core\Doctor\Checks\MigrationsCheck;
+use Filagora\Core\Doctor\Checks\ModulesCheck;
+use Filagora\Core\Doctor\Checks\PhpVersionCheck;
+use Filagora\Core\Doctor\Checks\UserModelCheck;
+use Filagora\Core\Doctor\Doctor;
+use Filagora\Core\Events\SettingChanged;
+use Filagora\Core\Modules\Module;
+use Filagora\Core\Modules\ModuleRegistry;
+use Filagora\Core\Navigation\NavigationGroupDefinition;
+use Filagora\Core\Navigation\NavigationGroupRegistry;
+use Filagora\Core\Privacy\PrivacyContributorRegistry;
+use Filagora\Core\Schema\Adopter;
+use Filagora\Core\Schema\PackageSchema;
+use Filagora\Core\Schema\SchemaRegistry;
+use Filagora\Core\Settings\SettingDefinitions;
+use Filagora\Core\Settings\SettingsRegistry;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
@@ -34,7 +34,7 @@ class CoreServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/forumkit.php', 'forumkit');
+        $this->mergeConfigFrom(__DIR__.'/../config/filagora.php', 'filagora');
 
         $this->app->singleton(ModuleRegistry::class);
         $this->app->singleton(NavigationGroupRegistry::class);
@@ -51,13 +51,13 @@ class CoreServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->app->make(ModuleRegistry::class)->register(
-            new Module('core', 'ForumKit Core', 'zcwilt/forumkit-core'),
+            new Module('core', 'Filagora Core', 'filagora/filagora-core'),
         );
 
         $this->app->make(NavigationGroupRegistry::class)->register(
             new NavigationGroupDefinition(
                 key: 'system',
-                label: fn (): string => __('forumkit::messages.navigation_groups.system'),
+                label: fn (): string => __('filagora::messages.navigation_groups.system'),
                 icon: 'heroicon-o-server-stack',
                 sort: 900,
             ),
@@ -65,8 +65,8 @@ class CoreServiceProvider extends ServiceProvider
 
         Event::listen(SettingChanged::class, fn () => $this->app->make(SettingsRegistry::class)->flush());
 
-        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'forumkit');
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'forumkit');
+        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'filagora');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'filagora');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         $this->app->make(SchemaRegistry::class)->register(
@@ -83,12 +83,12 @@ class CoreServiceProvider extends ServiceProvider
             $this->commands([DoctorCommand::class, InstallCommand::class, AdoptCommand::class, DumpSchemaCommand::class, DumpSchemaExtensionCommand::class]);
 
             $this->publishes([
-                __DIR__.'/../config/forumkit.php' => config_path('forumkit.php'),
-            ], 'forumkit-config');
+                __DIR__.'/../config/filagora.php' => config_path('filagora.php'),
+            ], 'filagora-config');
 
             $this->publishes([
                 __DIR__.'/../database/migrations' => database_path('migrations'),
-            ], 'forumkit-migrations');
+            ], 'filagora-migrations');
         }
     }
 }

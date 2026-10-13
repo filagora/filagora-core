@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Commands;
+namespace Filagora\Core\Commands;
 
-use ForumKit\Core\Schema\Adopter;
-use ForumKit\Core\Schema\AdoptionStatus;
+use Filagora\Core\Schema\Adopter;
+use Filagora\Core\Schema\AdoptionStatus;
 use Illuminate\Console\Command;
 
 class AdoptCommand extends Command
 {
-    protected $signature = 'forumkit:adopt
+    protected $signature = 'filagora:adopt
         {--package= : Only this module (for example entitlements)}
         {--dry-run : Report what would happen without recording anything}';
 
-    protected $description = 'Start using ForumKit packages on a database that already holds their tables';
+    protected $description = 'Start using Filagora packages on a database that already holds their tables';
 
     public function handle(Adopter $adopter): int
     {

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core;
+namespace Filagora\Core;
 
+use Filagora\Core\Filament\Resources\Settings\SettingResource;
+use Filagora\Core\Navigation\NavigationGroupRegistry;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
-use ForumKit\Core\Filament\Resources\Settings\SettingResource;
-use ForumKit\Core\Navigation\NavigationGroupRegistry;
 
-class ForumKitCorePlugin implements Plugin
+class FilagoraCorePlugin implements Plugin
 {
     public static function make(): static
     {
@@ -18,7 +18,7 @@ class ForumKitCorePlugin implements Plugin
 
     public function getId(): string
     {
-        return 'forumkit-core';
+        return 'filagora-core';
     }
 
     public function register(Panel $panel): void

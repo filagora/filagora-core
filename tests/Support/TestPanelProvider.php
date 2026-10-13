@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Tests\Support;
+namespace Filagora\Core\Tests\Support;
 
+use Filagora\Core\FilagoraCorePlugin;
 use Filament\Panel;
 use Filament\PanelProvider;
-use ForumKit\Core\ForumKitCorePlugin;
 
 class TestPanelProvider extends PanelProvider
 {
@@ -16,6 +16,6 @@ class TestPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->plugin(ForumKitCorePlugin::make());
+            ->plugin(FilagoraCorePlugin::make());
     }
 }

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Navigation;
+namespace Filagora\Core\Navigation;
 
 use Filament\Navigation\NavigationGroup;
 
 /**
  * Sidebar groups declared by the installed packages. A host can override a group's
- * label, icon, sort or collapsed state under `forumkit.navigation.groups.<key>`.
+ * label, icon, sort or collapsed state under `filagora.navigation.groups.<key>`.
  *
  * Resources place themselves in a group by returning `label($key)` from
  * `getNavigationGroup()`.
@@ -37,7 +37,7 @@ final class NavigationGroupRegistry
     public function label(string $key): string
     {
         $definition = $this->groups[$key] ?? null;
-        $override = config("forumkit.navigation.groups.{$key}.label");
+        $override = config("filagora.navigation.groups.{$key}.label");
 
         if (is_string($override) && $override !== '') {
             return $override;
@@ -73,8 +73,8 @@ final class NavigationGroupRegistry
     public function toFilament(): array
     {
         return array_map(function (string $key): NavigationGroup {
-            $icon = config("forumkit.navigation.groups.{$key}.icon", $this->groups[$key]->icon);
-            $collapsed = config("forumkit.navigation.groups.{$key}.collapsed", $this->groups[$key]->collapsed);
+            $icon = config("filagora.navigation.groups.{$key}.icon", $this->groups[$key]->icon);
+            $collapsed = config("filagora.navigation.groups.{$key}.collapsed", $this->groups[$key]->collapsed);
 
             return NavigationGroup::make($this->label($key))
                 ->icon(is_string($icon) ? $icon : null)
@@ -84,7 +84,7 @@ final class NavigationGroupRegistry
 
     private function sortOf(string $key): int
     {
-        $override = config("forumkit.navigation.groups.{$key}.sort");
+        $override = config("filagora.navigation.groups.{$key}.sort");
 
         return is_int($override) ? $override : $this->groups[$key]->sort;
     }

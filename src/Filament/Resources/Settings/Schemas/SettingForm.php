@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Filament\Resources\Settings\Schemas;
+namespace Filagora\Core\Filament\Resources\Settings\Schemas;
 
+use Filagora\Core\Settings\SettingType;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
-use ForumKit\Core\Settings\SettingType;
 
 class SettingForm
 {
@@ -21,7 +21,7 @@ class SettingForm
                 TextInput::make('key')
                     ->required()
                     ->maxLength(120)
-                    ->helperText(__('forumkit::messages.settings.key_help'))
+                    ->helperText(__('filagora::messages.settings.key_help'))
                     ->unique(ignoreRecord: true),
                 TextInput::make('label')
                     ->maxLength(160),
@@ -31,7 +31,7 @@ class SettingForm
                     ->default(SettingType::String->value)
                     ->options(self::typeOptions()),
                 Toggle::make('is_public')
-                    ->label(__('forumkit::messages.settings.public'))
+                    ->label(__('filagora::messages.settings.public'))
                     ->default(false),
                 TextInput::make('value')
                     ->visible(fn (Get $get): bool => in_array($get('value_type'), [SettingType::String->value, SettingType::Integer->value, SettingType::Page->value], true))
@@ -41,8 +41,8 @@ class SettingForm
                     ->visible(fn (Get $get): bool => $get('value_type') === SettingType::Boolean->value)
                     ->required(fn (Get $get): bool => $get('value_type') === SettingType::Boolean->value)
                     ->options([
-                        '1' => __('forumkit::messages.settings.true'),
-                        '0' => __('forumkit::messages.settings.false'),
+                        '1' => __('filagora::messages.settings.true'),
+                        '0' => __('filagora::messages.settings.false'),
                     ]),
                 Textarea::make('value')
                     ->columnSpanFull()
@@ -50,7 +50,7 @@ class SettingForm
                     ->visible(fn (Get $get): bool => in_array($get('value_type'), [SettingType::Text->value, SettingType::Json->value], true))
                     ->rule(fn (Get $get): \Closure => function (string $attribute, mixed $value, \Closure $fail) use ($get): void {
                         if ($get('value_type') === SettingType::Json->value && $value !== null && $value !== '' && ! json_validate((string) $value)) {
-                            $fail(__('forumkit::messages.settings.invalid_json'));
+                            $fail(__('filagora::messages.settings.invalid_json'));
                         }
                     }),
                 Textarea::make('description')

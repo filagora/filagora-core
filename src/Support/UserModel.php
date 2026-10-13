@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Support;
+namespace Filagora\Core\Support;
 
-use ForumKit\Core\Exceptions\InvalidConfiguration;
-use ForumKit\Core\ForumKit;
+use Filagora\Core\Exceptions\InvalidConfiguration;
+use Filagora\Core\Filagora;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Resolves the host application's user model.
  *
- * Precedence: ForumKit::useUserModel(), then `forumkit.user_model`, then the
+ * Precedence: Filagora::useUserModel(), then `filagora.user_model`, then the
  * default auth provider's model.
  */
 final class UserModel
@@ -21,8 +21,8 @@ final class UserModel
      */
     public static function class(): string
     {
-        $class = ForumKit::userModelOverride()
-            ?? self::configured('forumkit.user_model')
+        $class = Filagora::userModelOverride()
+            ?? self::configured('filagora.user_model')
             ?? self::configured('auth.providers.users.model')
             ?? throw InvalidConfiguration::userModelMissing();
 
@@ -57,7 +57,7 @@ final class UserModel
      */
     public static function titleAttribute(): string
     {
-        return self::configured('forumkit.user_title_attribute') ?? 'name';
+        return self::configured('filagora.user_title_attribute') ?? 'name';
     }
 
     private static function configured(string $key): ?string

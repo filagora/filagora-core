@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
+use Filagora\Core\FilagoraCorePlugin;
 use Filament\Panel;
-use ForumKit\Core\ForumKitCorePlugin;
 
 it('merges the package config', function () {
-    expect(config('forumkit.table_prefix'))->toBe('forumkit_');
+    expect(config('filagora.table_prefix'))->toBe('filagora_');
 });
 
 it('registers on a panel', function () {
-    $panel = Panel::make()->id('admin')->plugin(ForumKitCorePlugin::make());
+    $panel = Panel::make()->id('admin')->plugin(FilagoraCorePlugin::make());
 
-    expect($panel->hasPlugin('forumkit-core'))->toBeTrue();
+    expect($panel->hasPlugin('filagora-core'))->toBeTrue();
 });

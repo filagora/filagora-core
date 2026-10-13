@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Doctor;
+namespace Filagora\Core\Doctor;
 
 enum CheckStatus: string
 {

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use ForumKit\Core\Content\ExtensionRegistry;
-use ForumKit\Core\Content\MarkdownRenderer;
-use ForumKit\Core\Contracts\HtmlTransformer;
+use Filagora\Core\Content\ExtensionRegistry;
+use Filagora\Core\Content\MarkdownRenderer;
+use Filagora\Core\Contracts\HtmlTransformer;
 
 function markdown(): MarkdownRenderer
 {
@@ -38,7 +38,7 @@ it('drops unsafe link schemes', function () {
 });
 
 it('marks external links and leaves internal ones alone', function () {
-    config(['app.url' => 'https://forum.example.test', 'forumkit.markdown.internal_hosts' => ['docs.example.test']]);
+    config(['app.url' => 'https://forum.example.test', 'filagora.markdown.internal_hosts' => ['docs.example.test']]);
 
     $html = (new MarkdownRenderer(new ExtensionRegistry))->render(
         '[ext](https://other.example.org/x) [self](https://forum.example.test/a) [docs](https://docs.example.test/b)'
@@ -55,7 +55,7 @@ it('marks external links and leaves internal ones alone', function () {
 it('turns a single newline into a visible break unless disabled', function () {
     expect(markdown()->render("one\ntwo"))->toContain("one<br />\ntwo");
 
-    config(['forumkit.markdown.line_breaks' => false]);
+    config(['filagora.markdown.line_breaks' => false]);
 
     expect((new MarkdownRenderer(new ExtensionRegistry))->render("one\ntwo"))->not->toContain('<br />');
 });

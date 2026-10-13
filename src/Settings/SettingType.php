@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Settings;
+namespace Filagora\Core\Settings;
 
 enum SettingType: string
 {
