@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Schema;
+namespace Filagora\Core\Schema;
 
 final readonly class AdoptionPlan
 {

@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-use ForumKit\Core\Exceptions\InvalidConfiguration;
-use ForumKit\Core\Modules\Module;
-use ForumKit\Core\Modules\ModuleRegistry;
+use Filagora\Core\Exceptions\InvalidConfiguration;
+use Filagora\Core\Modules\Module;
+use Filagora\Core\Modules\ModuleRegistry;
 
 it('registers core itself', function () {
     $registry = app(ModuleRegistry::class);
 
     expect($registry->has('core'))->toBeTrue()
-        ->and($registry->get('core')->package)->toBe('zcwilt/forumkit-core');
+        ->and($registry->get('core')->package)->toBe('filagora/filagora-core');
 });
 
 it('is a singleton', function () {
@@ -19,12 +19,12 @@ it('is a singleton', function () {
 
 it('reports requirements that are not installed', function () {
     $registry = new ModuleRegistry;
-    $registry->register(new Module('core', 'Core', 'zcwilt/forumkit-core'));
-    $registry->register(new Module('forums', 'Forums', 'zcwilt/forumkit-forums', requires: ['core', 'entitlements']));
+    $registry->register(new Module('core', 'Core', 'filagora/filagora-core'));
+    $registry->register(new Module('forums', 'Forums', 'filagora/filagora-forums', requires: ['core', 'entitlements']));
 
     expect($registry->missingRequirements())->toBe(['forums' => ['entitlements']]);
 
-    $registry->register(new Module('entitlements', 'Entitlements', 'zcwilt/forumkit-entitlements', requires: ['core']));
+    $registry->register(new Module('entitlements', 'Entitlements', 'filagora/filagora-entitlements', requires: ['core']));
 
     expect($registry->missingRequirements())->toBe([]);
 });

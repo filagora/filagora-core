@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use ForumKit\Core\Contracts\DoctorCheck;
-use ForumKit\Core\Doctor\CheckResult;
-use ForumKit\Core\Doctor\Doctor;
-use ForumKit\Core\Modules\Module;
-use ForumKit\Core\Modules\ModuleRegistry;
+use Filagora\Core\Contracts\DoctorCheck;
+use Filagora\Core\Doctor\CheckResult;
+use Filagora\Core\Doctor\Doctor;
+use Filagora\Core\Modules\Module;
+use Filagora\Core\Modules\ModuleRegistry;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Schema;
 
@@ -15,29 +15,29 @@ uses(RefreshDatabase::class);
 beforeEach(fn () => $this->loadLaravelMigrations());
 
 it('passes on a healthy install', function () {
-    $this->artisan('forumkit:doctor')
+    $this->artisan('filagora:doctor')
         ->expectsOutputToContain('All checks passed.')
         ->assertExitCode(0);
 });
 
 it('fails when the core tables are missing', function () {
-    Schema::drop('forumkit_system_settings');
+    Schema::drop('filagora_system_settings');
 
-    $this->artisan('forumkit:doctor')
-        ->expectsOutputToContain('forumkit_system_settings')
+    $this->artisan('filagora:doctor')
+        ->expectsOutputToContain('filagora_system_settings')
         ->assertExitCode(1);
 });
 
 it('fails when the user model cannot be resolved', function () {
-    config(['forumkit.user_model' => 'App\\Missing\\User']);
+    config(['filagora.user_model' => 'App\\Missing\\User']);
 
-    $this->artisan('forumkit:doctor')->assertExitCode(1);
+    $this->artisan('filagora:doctor')->assertExitCode(1);
 });
 
 it('fails when a registered module needs one that is not installed', function () {
-    app(ModuleRegistry::class)->register(new Module('forums', 'Forums', 'zcwilt/forumkit-forums', requires: ['entitlements']));
+    app(ModuleRegistry::class)->register(new Module('forums', 'Forums', 'filagora/filagora-forums', requires: ['entitlements']));
 
-    $this->artisan('forumkit:doctor')
+    $this->artisan('filagora:doctor')
         ->expectsOutputToContain('forums needs entitlements')
         ->assertExitCode(1);
 });
@@ -67,7 +67,7 @@ it('runs checks registered by other packages and survives one that throws', func
 });
 
 it('installs: migrates and then runs the doctor', function () {
-    $this->artisan('forumkit:install', ['--force' => true])
+    $this->artisan('filagora:install', ['--force' => true])
         ->expectsOutputToContain('All checks passed.')
         ->assertExitCode(0);
 });

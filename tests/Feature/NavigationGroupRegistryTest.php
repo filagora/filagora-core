@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
+use Filagora\Core\FilagoraCorePlugin;
+use Filagora\Core\Navigation\NavigationGroupDefinition;
+use Filagora\Core\Navigation\NavigationGroupRegistry;
 use Filament\Panel;
-use ForumKit\Core\ForumKitCorePlugin;
-use ForumKit\Core\Navigation\NavigationGroupDefinition;
-use ForumKit\Core\Navigation\NavigationGroupRegistry;
 
 function groups(): NavigationGroupRegistry
 {
@@ -27,7 +27,7 @@ it('resolves lazy and plain labels', function () {
 });
 
 it('lets the host override label, sort, icon and collapsed state', function () {
-    config(['forumkit.navigation.groups' => [
+    config(['filagora.navigation.groups' => [
         'system' => ['label' => 'Admin', 'sort' => 1, 'icon' => 'heroicon-o-cog', 'collapsed' => false],
     ]]);
 
@@ -48,7 +48,7 @@ it('registers the core system group', function () {
 });
 
 it('applies registered groups to a panel when the plugin boots', function () {
-    $panel = Panel::make()->id('admin')->plugin(ForumKitCorePlugin::make());
+    $panel = Panel::make()->id('admin')->plugin(FilagoraCorePlugin::make());
 
     $panel->boot();
 

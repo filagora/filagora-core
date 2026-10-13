@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Doctor\Checks;
+namespace Filagora\Core\Doctor\Checks;
 
-use ForumKit\Core\Contracts\DoctorCheck;
-use ForumKit\Core\Doctor\CheckResult;
-use ForumKit\Core\Modules\ModuleRegistry;
+use Filagora\Core\Contracts\DoctorCheck;
+use Filagora\Core\Doctor\CheckResult;
+use Filagora\Core\Modules\ModuleRegistry;
 
 final class ModulesCheck implements DoctorCheck
 {

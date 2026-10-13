@@ -5,6 +5,13 @@ All notable changes to this package are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-13
+
+### Changed
+
+- **Renamed to Filagora.** The Composer package is now `filagora/filagora-core` (it was `zcwilt/forumkit-core`), and the repository moved to `github.com/filagora/filagora-core`. The PHP namespace is `Filagora\Core\` (was `ForumKit\Core\`), the config file is `config/filagora.php`, environment variables are `FILAGORA_*`, the default table prefix is `filagora_`, and the commands are `filagora:install`, `filagora:doctor`, `filagora:adopt` and `filagora:schema:dump`. Nothing else changed: this is a rename, so moving from 0.1 means renaming those names in your application and its `.env`.
+
+
 ## [0.1.3] - 2026-10-12
 
 ### Fixed

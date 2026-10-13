@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Navigation;
+namespace Filagora\Core\Navigation;
 
 use Closure;
 

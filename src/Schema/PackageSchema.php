@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Schema;
+namespace Filagora\Core\Schema;
 
 use InvalidArgumentException;
 
 /**
  * The tables a package owns, as they exist in a site that already uses them, plus where
- * the package's migrations live. `forumkit:adopt` checks a database against this and, if
+ * the package's migrations live. `filagora:adopt` checks a database against this and, if
  * it matches, records the migrations as run.
  *
  * The snapshot is the state after all of the package's migrations, so it changes whenever

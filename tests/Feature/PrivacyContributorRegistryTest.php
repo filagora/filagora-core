@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use ForumKit\Core\Contracts\PrivacyContributor;
-use ForumKit\Core\Privacy\PrivacyContributorRegistry;
+use Filagora\Core\Contracts\PrivacyContributor;
+use Filagora\Core\Privacy\PrivacyContributorRegistry;
 use Illuminate\Database\Eloquent\Model;
 
 function contributor(string $key, string $marker): PrivacyContributor

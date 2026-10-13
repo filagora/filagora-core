@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Commands;
+namespace Filagora\Core\Commands;
 
 /**
  * Writes schema snapshots as PHP source: short array syntax, four-space indentation.

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Filament\Resources\Settings\Tables;
+namespace Filagora\Core\Filament\Resources\Settings\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;

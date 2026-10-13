@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
+use Filagora\Core\Filament\Resources\Settings\Pages\CreateSetting;
+use Filagora\Core\Filament\Resources\Settings\Pages\EditSetting;
+use Filagora\Core\Filament\Resources\Settings\Pages\ListSettings;
+use Filagora\Core\Filament\Resources\Settings\SettingResource;
+use Filagora\Core\Models\Setting;
+use Filagora\Core\Settings\SettingsRegistry;
 use Filament\Facades\Filament;
-use ForumKit\Core\Filament\Resources\Settings\Pages\CreateSetting;
-use ForumKit\Core\Filament\Resources\Settings\Pages\EditSetting;
-use ForumKit\Core\Filament\Resources\Settings\Pages\ListSettings;
-use ForumKit\Core\Filament\Resources\Settings\SettingResource;
-use ForumKit\Core\Models\Setting;
-use ForumKit\Core\Settings\SettingsRegistry;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Gate;
@@ -43,7 +43,7 @@ it('denies access when the ability is not defined', function () {
 });
 
 it('denies a user the gate refuses', function () {
-    Gate::define('forumkit.settings.manage', fn () => false);
+    Gate::define('filagora.settings.manage', fn () => false);
     actingAs($this->staff);
 
     expect(SettingResource::canViewAny())->toBeFalse()
@@ -51,7 +51,7 @@ it('denies a user the gate refuses', function () {
 });
 
 it('lists settings for a user the gate allows', function () {
-    Gate::define('forumkit.settings.manage', fn () => true);
+    Gate::define('filagora.settings.manage', fn () => true);
     actingAs($this->staff);
     $settings = collect([
         Setting::create(['key' => 'a.one', 'value_type' => 'string', 'value' => 'x']),
@@ -63,7 +63,7 @@ it('lists settings for a user the gate allows', function () {
 });
 
 it('creates a typed setting', function () {
-    Gate::define('forumkit.settings.manage', fn () => true);
+    Gate::define('filagora.settings.manage', fn () => true);
     actingAs($this->staff);
 
     Livewire::test(CreateSetting::class)
@@ -77,7 +77,7 @@ it('creates a typed setting', function () {
 });
 
 it('requires a unique key and valid json', function () {
-    Gate::define('forumkit.settings.manage', fn () => true);
+    Gate::define('filagora.settings.manage', fn () => true);
     actingAs($this->staff);
     Setting::create(['key' => 'dup', 'value_type' => 'string', 'value' => 'x']);
 
@@ -93,7 +93,7 @@ it('requires a unique key and valid json', function () {
 });
 
 it('edits a setting and the registry sees the new value', function () {
-    Gate::define('forumkit.settings.manage', fn () => true);
+    Gate::define('filagora.settings.manage', fn () => true);
     actingAs($this->staff);
     $setting = Setting::create(['key' => 'site.name', 'value_type' => 'string', 'value' => 'Old']);
 

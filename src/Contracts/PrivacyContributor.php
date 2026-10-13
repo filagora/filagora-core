@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Contracts;
+namespace Filagora\Core\Contracts;
 
 use Illuminate\Database\Eloquent\Model;
 

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Settings;
+namespace Filagora\Core\Settings;
 
-use ForumKit\Core\Models\Setting;
-use ForumKit\Core\Support\Models;
+use Filagora\Core\Models\Setting;
+use Filagora\Core\Support\Models;
 use Illuminate\Support\Facades\Schema;
 
 /**

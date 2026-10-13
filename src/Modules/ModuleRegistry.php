@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Modules;
+namespace Filagora\Core\Modules;
 
-use ForumKit\Core\Exceptions\InvalidConfiguration;
+use Filagora\Core\Exceptions\InvalidConfiguration;
 
 /**
- * The modules (ForumKit packages) present in this install. Each package registers
+ * The modules (Filagora packages) present in this install. Each package registers
  * itself from its service provider, so hosts and other packages can ask what is
- * installed and `forumkit:doctor` can verify the dependency graph.
+ * installed and `filagora:doctor` can verify the dependency graph.
  */
 final class ModuleRegistry
 {

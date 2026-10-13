@@ -1,6 +1,6 @@
 {
-    "name": "zcwilt/forumkit-core",
-    "description": "ForumKit core: module registry, settings and shared support for the ForumKit Filament packages.",
+    "name": "filagora/filagora-core",
+    "description": "Filagora core: module registry, settings and shared support for the Filagora Filament packages.",
     "type": "library",
     "license": "MIT",
     "keywords": ["laravel", "filament", "filament-plugin", "forum"],
@@ -18,12 +18,12 @@
     },
     "autoload": {
         "psr-4": {
-            "ForumKit\\Core\\": "src/"
+            "Filagora\\Core\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "ForumKit\\Core\\Tests\\": "tests/"
+            "Filagora\\Core\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -34,7 +34,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "ForumKit\\Core\\CoreServiceProvider"
+                "Filagora\\Core\\CoreServiceProvider"
             ]
         }
     },

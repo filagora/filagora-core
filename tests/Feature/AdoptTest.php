@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use ForumKit\Core\Schema\Adopter;
-use ForumKit\Core\Schema\AdoptionStatus;
-use ForumKit\Core\Schema\PackageSchema;
-use ForumKit\Core\Schema\SchemaRegistry;
-use ForumKit\Core\Schema\TableShape;
-use ForumKit\Core\Support\Tables;
-use ForumKit\Core\Support\UserKey;
-use ForumKit\Core\Support\UserModel;
+use Filagora\Core\Schema\Adopter;
+use Filagora\Core\Schema\AdoptionStatus;
+use Filagora\Core\Schema\PackageSchema;
+use Filagora\Core\Schema\SchemaRegistry;
+use Filagora\Core\Schema\TableShape;
+use Filagora\Core\Support\Tables;
+use Filagora\Core\Support\UserKey;
+use Filagora\Core\Support\UserModel;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
@@ -52,7 +52,7 @@ function dropThingTables(): void
  */
 function registerThingsPackage(): PackageSchema
 {
-    $dir = sys_get_temp_dir().'/forumkit-adopt-'.uniqid();
+    $dir = sys_get_temp_dir().'/filagora-adopt-'.uniqid();
     File::makeDirectory($dir);
     File::put($dir.'/2026_01_01_000001_create_things_table.php', '<?php');
     File::put($dir.'/2026_01_01_000002_create_thing_notes_table.php', '<?php');
@@ -94,7 +94,7 @@ it('reports a package whose tables match as adoptable', function () {
 });
 
 it('records nothing on a dry run', function () {
-    $this->artisan('forumkit:adopt', ['--dry-run' => true])
+    $this->artisan('filagora:adopt', ['--dry-run' => true])
         ->expectsOutputToContain('things: adoptable')
         ->expectsOutputToContain('Dry run: nothing was recorded.')
         ->assertExitCode(0);
@@ -105,12 +105,12 @@ it('records nothing on a dry run', function () {
 it('records the package migrations as run in one new batch, and only once', function () {
     $before = (int) DB::table('migrations')->max('batch');
 
-    $this->artisan('forumkit:adopt')->expectsOutputToContain('Recorded 2 migration(s) as run.')->assertExitCode(0);
+    $this->artisan('filagora:adopt')->expectsOutputToContain('Recorded 2 migration(s) as run.')->assertExitCode(0);
 
     expect(recordedMigrations())->toBe(['2026_01_01_000001_create_things_table', '2026_01_01_000002_create_thing_notes_table'])
         ->and(DB::table('migrations')->where('migration', 'like', '2026_01_01_%')->pluck('batch')->unique()->all())->toBe([$before + 1]);
 
-    $this->artisan('forumkit:adopt')
+    $this->artisan('filagora:adopt')
         ->expectsOutputToContain('things: already adopted')
         ->expectsOutputToContain('Recorded 0 migration(s) as run.')
         ->assertExitCode(0);
@@ -122,7 +122,7 @@ it('never changes the tables or their data', function () {
     DB::table(Tables::name('things'))->insert(['user_id' => DB::table('users')->insertGetId(['name' => 'U', 'email' => 'u@example.test', 'password' => 'x']), 'key' => 'k', 'value' => 'v']);
     $before = TableShape::inspect('things')->toArray();
 
-    $this->artisan('forumkit:adopt')->assertExitCode(0);
+    $this->artisan('filagora:adopt')->assertExitCode(0);
 
     expect(TableShape::inspect('things')->toArray())->toBe($before)
         ->and(DB::table(Tables::name('things'))->value('value'))->toBe('v');
@@ -132,7 +132,7 @@ it('refuses on a column that differs and records nothing', function () {
     dropThingTables();
     createThingTables(valueType: 'string');
 
-    $this->artisan('forumkit:adopt')
+    $this->artisan('filagora:adopt')
         ->expectsOutputToContain('things: mismatch')
         ->expectsOutputToContain('things: column value type is varchar(255), expected text')
         ->expectsOutputToContain('Nothing was recorded')
@@ -176,7 +176,7 @@ it('refuses a package whose tables are only partly present', function () {
     expect($plan->status)->toBe(AdoptionStatus::Partial)
         ->and($plan->differences)->toBe(['thing_notes: table is missing while other tables of this package exist']);
 
-    $this->artisan('forumkit:adopt')->assertExitCode(1);
+    $this->artisan('filagora:adopt')->assertExitCode(1);
 
     expect(recordedMigrations())->toBe([]);
 });
@@ -184,7 +184,7 @@ it('refuses a package whose tables are only partly present', function () {
 it('tells a fresh install to migrate instead', function () {
     dropThingTables();
 
-    $this->artisan('forumkit:adopt')
+    $this->artisan('filagora:adopt')
         ->expectsOutputToContain('things: fresh install')
         ->expectsOutputToContain('run `php artisan migrate`')
         ->assertExitCode(0);
@@ -193,9 +193,9 @@ it('tells a fresh install to migrate instead', function () {
 });
 
 it('adopts tables that have no prefix from a snapshot taken with the default prefix', function () {
-    // The snapshot was taken against forumkit_ tables. An adopting site has bare names.
+    // The snapshot was taken against filagora_ tables. An adopting site has bare names.
     dropThingTables();
-    config(['forumkit.table_prefix' => '']);
+    config(['filagora.table_prefix' => '']);
     createThingTables();
 
     $plan = app(Adopter::class)->planFor($this->schema);
@@ -206,11 +206,11 @@ it('adopts tables that have no prefix from a snapshot taken with the default pre
 });
 
 it('limits the run to one package', function () {
-    $this->artisan('forumkit:adopt', ['--package' => 'nothing-here'])
+    $this->artisan('filagora:adopt', ['--package' => 'nothing-here'])
         ->expectsOutputToContain('No packages with a schema snapshot are installed.')
         ->assertExitCode(0);
 
-    $this->artisan('forumkit:adopt', ['--package' => 'things', '--dry-run' => true])
+    $this->artisan('filagora:adopt', ['--package' => 'things', '--dry-run' => true])
         ->expectsOutputToContain('things: adoptable')
         ->assertExitCode(0);
 });
@@ -250,9 +250,9 @@ it('can compare column order when asked', function () {
 });
 
 it('dumps a snapshot that loads back to the same shape', function () {
-    $path = sys_get_temp_dir().'/forumkit-snapshot-'.uniqid().'.php';
+    $path = sys_get_temp_dir().'/filagora-snapshot-'.uniqid().'.php';
 
-    $this->artisan('forumkit:schema:dump', ['tables' => ['things', 'thing_notes'], '--path' => $path])->assertExitCode(0);
+    $this->artisan('filagora:schema:dump', ['tables' => ['things', 'thing_notes'], '--path' => $path])->assertExitCode(0);
 
     $loaded = PackageSchema::fromFile('things', $path, $this->schema->migrationsPath);
 
@@ -264,7 +264,7 @@ it('dumps a snapshot that loads back to the same shape', function () {
 });
 
 it('rejects a snapshot file that does not return tables', function () {
-    $path = sys_get_temp_dir().'/forumkit-bad-'.uniqid().'.php';
+    $path = sys_get_temp_dir().'/filagora-bad-'.uniqid().'.php';
     File::put($path, '<?php return [];');
 
     PackageSchema::fromFile('x', $path, '/tmp');

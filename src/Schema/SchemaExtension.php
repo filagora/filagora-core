@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Schema;
+namespace Filagora\Core\Schema;
 
 use InvalidArgumentException;
 
 /**
  * Extra columns, indexes and foreign keys a profile package (for example one for a particular
- * site) adds to tables owned by another package. `forumkit:adopt` checks the package's snapshot
+ * site) adds to tables owned by another package. `filagora:adopt` checks the package's snapshot
  * plus every registered extension exactly, and still reports anything undeclared as unexpected.
  *
  * @phpstan-import-type Column from TableShape
@@ -31,7 +31,7 @@ final readonly class SchemaExtension
     ) {}
 
     /**
-     * @param  string  $snapshotFile  A PHP file returning `['tables' => [base name => extras]]`, as `forumkit:schema:dump-extension` writes it.
+     * @param  string  $snapshotFile  A PHP file returning `['tables' => [base name => extras]]`, as `filagora:schema:dump-extension` writes it.
      */
     public static function fromFile(string $name, string $module, string $snapshotFile, ?string $migrationsPath = null): self
     {

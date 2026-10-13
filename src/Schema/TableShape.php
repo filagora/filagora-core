@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Schema;
+namespace Filagora\Core\Schema;
 
-use ForumKit\Core\Support\Tables;
-use ForumKit\Core\Support\UserModel;
+use Filagora\Core\Support\Tables;
+use Filagora\Core\Support\UserModel;
 use Illuminate\Support\Facades\Schema;
 
 /**

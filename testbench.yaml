@@ -1,2 +1,2 @@
 providers:
-  - ForumKit\Core\CoreServiceProvider
+  - Filagora\Core\CoreServiceProvider

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Models;
+namespace Filagora\Core\Models;
 
-use ForumKit\Core\Events\SettingChanged;
-use ForumKit\Core\Settings\SettingType;
-use ForumKit\Core\Support\Tables;
+use Filagora\Core\Events\SettingChanged;
+use Filagora\Core\Settings\SettingType;
+use Filagora\Core\Support\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 

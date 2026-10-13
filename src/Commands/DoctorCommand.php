@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Commands;
+namespace Filagora\Core\Commands;
 
-use ForumKit\Core\Doctor\CheckStatus;
-use ForumKit\Core\Doctor\Doctor;
+use Filagora\Core\Doctor\CheckStatus;
+use Filagora\Core\Doctor\Doctor;
 use Illuminate\Console\Command;
 
 class DoctorCommand extends Command
 {
-    protected $signature = 'forumkit:doctor';
+    protected $signature = 'filagora:doctor';
 
-    protected $description = 'Check that ForumKit is installed and configured correctly';
+    protected $description = 'Check that Filagora is installed and configured correctly';
 
     public function handle(Doctor $doctor): int
     {

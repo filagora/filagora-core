@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ForumKit\Core\Settings;
+namespace Filagora\Core\Settings;
 
 /**
  * A setting a package owns: its key, type and default. The database only holds

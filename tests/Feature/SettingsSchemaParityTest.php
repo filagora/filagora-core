@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use ForumKit\Core\Models\Setting;
-use ForumKit\Core\Schema\Adopter;
-use ForumKit\Core\Schema\AdoptionStatus;
-use ForumKit\Core\Schema\SchemaRegistry;
-use ForumKit\Core\Schema\TableShape;
-use ForumKit\Core\Settings\SettingType;
+use Filagora\Core\Models\Setting;
+use Filagora\Core\Schema\Adopter;
+use Filagora\Core\Schema\AdoptionStatus;
+use Filagora\Core\Schema\SchemaRegistry;
+use Filagora\Core\Schema\TableShape;
+use Filagora\Core\Settings\SettingType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -20,10 +20,10 @@ uses(RefreshDatabase::class);
  * nullability, defaults and indexes) so a migration change cannot drift from it.
  */
 it('matches the existing system_settings table shape', function () {
-    config(['forumkit.table_prefix' => '']);
+    config(['filagora.table_prefix' => '']);
 
-    Schema::dropIfExists('forumkit_system_settings');
-    (require __DIR__.'/../../database/migrations/2026_10_10_000000_create_forumkit_system_settings_table.php')->up();
+    Schema::dropIfExists('filagora_system_settings');
+    (require __DIR__.'/../../database/migrations/2026_10_10_000000_create_filagora_system_settings_table.php')->up();
 
     $columns = collect(Schema::getColumns('system_settings'))->keyBy('name');
 
@@ -55,7 +55,7 @@ it('matches the existing system_settings table shape', function () {
 
 it('reads every value type already stored in the support site', function () {
     foreach (['string', 'text', 'integer', 'boolean', 'json', 'page'] as $type) {
-        DB::table('forumkit_system_settings')->insert(['key' => "legacy.{$type}", 'value_type' => $type, 'value' => null]);
+        DB::table('filagora_system_settings')->insert(['key' => "legacy.{$type}", 'value_type' => $type, 'value' => null]);
     }
 
     $rows = Setting::query()->get();
@@ -76,19 +76,19 @@ it('keeps the shipped snapshot in step with the migration, column order included
     expect($snapshot)->not->toBeNull()
         ->and(array_keys($snapshot->tables))->toBe(['system_settings'])
         ->and(TableShape::inspect('system_settings')->differencesFrom($snapshot->tables['system_settings'], compareColumnOrder: true))->toBe([])
-        ->and($snapshot->migrationNames())->toBe(['2026_10_10_000000_create_forumkit_system_settings_table']);
+        ->and($snapshot->migrationNames())->toBe(['2026_10_10_000000_create_filagora_system_settings_table']);
 });
 
 it('adopts an existing system_settings table that has no prefix', function () {
-    Schema::drop('forumkit_system_settings');
-    config(['forumkit.table_prefix' => '']);
-    (require __DIR__.'/../../database/migrations/2026_10_10_000000_create_forumkit_system_settings_table.php')->up();
-    DB::table('migrations')->where('migration', '2026_10_10_000000_create_forumkit_system_settings_table')->delete();
+    Schema::drop('filagora_system_settings');
+    config(['filagora.table_prefix' => '']);
+    (require __DIR__.'/../../database/migrations/2026_10_10_000000_create_filagora_system_settings_table.php')->up();
+    DB::table('migrations')->where('migration', '2026_10_10_000000_create_filagora_system_settings_table')->delete();
 
     $plan = app(Adopter::class)->planFor(app(SchemaRegistry::class)->get('core'));
 
     expect($plan->status)->toBe(AdoptionStatus::Adoptable, implode('; ', $plan->differences));
 
     Schema::drop('system_settings');
-    config(['forumkit.table_prefix' => 'forumkit_']);
+    config(['filagora.table_prefix' => 'filagora_']);
 });
