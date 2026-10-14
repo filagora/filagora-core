@@ -9,3 +9,8 @@ parameters:
         - src
         - config
         - database
+    ignoreErrors:
+        # A trait for other packages' Filament resources to use; nothing in core does.
+        -
+            message: '#Trait Filagora\\Core\\Filament\\Concerns\\GatedByAbility is used zero times#'
+            path: src/Filament/Concerns/GatedByAbility.php

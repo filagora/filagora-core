@@ -42,7 +42,9 @@ Register the plugin on a Filament panel:
 | `NavigationGroupRegistry` | Packages declare sidebar groups; hosts override label, icon, sort and collapsed state |
 | `SettingsRegistry` + `SettingResource` | Typed key/value settings with package-declared defaults and a staff screen |
 | `MarkdownRenderer` + `ExtensionRegistry` | Safe CommonMark/GFM rendering that packages extend |
-| `PrivacyContributor` | Contract for exporting and erasing a user's data, for the planned compliance package |
+| `AccessChecker` | The one question every package asks, "may this user do this?", answered with a key from the package's `gates` config. `filagora-entitlements` binds an answer from entitlement grants; a host can bind its own (roles, policies, a permissions package). With nothing bound everyone is denied, and `filagora:doctor` says so |
+| `GateAbilities`, `GatedByAbility` | Define a package's Gate abilities from its `gates` config, and gate every action of a Filament resource behind one ability |
+| `PrivacyContributor`, `RetentionRule` | Contracts for exporting and erasing a user's data and for pruning records past their retention, which the compliance package runs without knowing the packages that register them |
 | `Doctor` | Health checks that every package can add to |
 | `SchemaRegistry`, `SchemaExtension` | Table snapshots that `filagora:adopt` checks, and extensions a profile package uses to declare a site's extra columns, indexes and foreign keys |
 

@@ -5,6 +5,12 @@ All notable changes to this package are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- **`AccessChecker`** contract (`allows`, `allowsAny`, `allowsAll`) and `DenyAllAccessChecker`, the default until something is bound, so a forgotten binding locks screens instead of opening them. `filagora:doctor` warns while the default is in use. Packages ask it instead of depending on `filagora-entitlements`.
+- `GateAbilities::define()` and `::keys()` (a package's `gates` config as Gate abilities that ask the bound checker) and the Filament trait `Filagora\Core\Filament\Concerns\GatedByAbility` (moved here from `filagora-entitlements`, which keeps a deprecated alias).
+- `RetentionRule` contract, `RetentionRuleRegistry` and `TableRetentionRule` (delete rows of a table older than N days, with a dry run) for the compliance package's prune command.
+
 ## [0.2.0] - 2026-10-13
 
 ### Changed

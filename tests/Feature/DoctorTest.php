@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
+use Filagora\Core\Contracts\AccessChecker;
 use Filagora\Core\Contracts\DoctorCheck;
 use Filagora\Core\Doctor\CheckResult;
 use Filagora\Core\Doctor\Doctor;
 use Filagora\Core\Modules\Module;
 use Filagora\Core\Modules\ModuleRegistry;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Schema;
 
@@ -70,4 +72,28 @@ it('installs: migrates and then runs the doctor', function () {
     $this->artisan('filagora:install', ['--force' => true])
         ->expectsOutputToContain('All checks passed.')
         ->assertExitCode(0);
+});
+
+it('warns while no access checker is bound, and names the checker once one is', function () {
+    $this->artisan('filagora:doctor')->expectsOutputToContain('Nothing is bound')->assertExitCode(0);
+
+    app()->bind(AccessChecker::class, fn () => new class implements AccessChecker
+    {
+        public function allows(?Authenticatable $user, string $key): bool
+        {
+            return true;
+        }
+
+        public function allowsAny(?Authenticatable $user, array $keys): bool
+        {
+            return true;
+        }
+
+        public function allowsAll(?Authenticatable $user, array $keys): bool
+        {
+            return true;
+        }
+    });
+
+    $this->artisan('filagora:doctor')->doesntExpectOutputToContain('Nothing is bound')->assertExitCode(0);
 });
