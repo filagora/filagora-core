@@ -5,6 +5,8 @@ All notable changes to this package are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-10-14
+
 ### Added
 
 - **`AccessChecker`** contract (`allows`, `allowsAny`, `allowsAll`) and `DenyAllAccessChecker`, the default until something is bound, so a forgotten binding locks screens instead of opening them. `filagora:doctor` warns while the default is in use. Packages ask it instead of depending on `filagora-entitlements`.
