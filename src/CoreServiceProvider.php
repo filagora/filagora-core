@@ -11,6 +11,8 @@ use Filagora\Core\Commands\DumpSchemaExtensionCommand;
 use Filagora\Core\Commands\InstallCommand;
 use Filagora\Core\Content\ExtensionRegistry;
 use Filagora\Core\Content\MarkdownRenderer;
+use Filagora\Core\Contracts\AccessChecker;
+use Filagora\Core\Doctor\Checks\AccessCheckerCheck;
 use Filagora\Core\Doctor\Checks\MigrationsCheck;
 use Filagora\Core\Doctor\Checks\ModulesCheck;
 use Filagora\Core\Doctor\Checks\PhpVersionCheck;
@@ -22,11 +24,13 @@ use Filagora\Core\Modules\ModuleRegistry;
 use Filagora\Core\Navigation\NavigationGroupDefinition;
 use Filagora\Core\Navigation\NavigationGroupRegistry;
 use Filagora\Core\Privacy\PrivacyContributorRegistry;
+use Filagora\Core\Privacy\RetentionRuleRegistry;
 use Filagora\Core\Schema\Adopter;
 use Filagora\Core\Schema\PackageSchema;
 use Filagora\Core\Schema\SchemaRegistry;
 use Filagora\Core\Settings\SettingDefinitions;
 use Filagora\Core\Settings\SettingsRegistry;
+use Filagora\Core\Support\DenyAllAccessChecker;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
@@ -43,6 +47,8 @@ class CoreServiceProvider extends ServiceProvider
         $this->app->singleton(ExtensionRegistry::class);
         $this->app->singleton(MarkdownRenderer::class);
         $this->app->singleton(PrivacyContributorRegistry::class);
+        $this->app->singleton(RetentionRuleRegistry::class);
+        $this->app->bindIf(AccessChecker::class, DenyAllAccessChecker::class);
         $this->app->singleton(Doctor::class);
         $this->app->singleton(SchemaRegistry::class);
         $this->app->singleton(Adopter::class);
@@ -78,6 +84,7 @@ class CoreServiceProvider extends ServiceProvider
         $doctor->register(new UserModelCheck);
         $doctor->register(new MigrationsCheck);
         $doctor->register($this->app->make(ModulesCheck::class));
+        $doctor->register(new AccessCheckerCheck);
 
         if ($this->app->runningInConsole()) {
             $this->commands([DoctorCommand::class, InstallCommand::class, AdoptCommand::class, DumpSchemaCommand::class, DumpSchemaExtensionCommand::class]);
