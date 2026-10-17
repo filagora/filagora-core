@@ -20,7 +20,7 @@ final readonly class SchemaExtension
     /**
      * @param  string  $name  Who declares it, for example `zencart`.
      * @param  string  $module  The package whose tables it extends, for example `forums`.
-     * @param  array<string, array{columns?: array<string, Column>, indexes?: array<string, Index>, foreign_keys?: array<string, ForeignKey>}>  $tables  Keyed by base table name.
+     * @param  array<string, array{columns?: array<string, Column>, indexes?: array<string, Index>, foreign_keys?: array<string, ForeignKey>, drop_indexes?: list<string>}>  $tables  Keyed by base table name. `drop_indexes` names base indexes the site's table does not have (it has a composite index in their place).
      * @param  string|null  $migrationsPath  Where the extension's migrations live, recorded as run on adoption.
      */
     public function __construct(

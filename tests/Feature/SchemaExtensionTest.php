@@ -285,3 +285,52 @@ it('fails loudly, instead of describing nothing, when a table does not exist', f
 
     createGadgets();
 });
+
+// ----------------------------------------------------- an index replaced by the site
+
+/**
+ * The site has a composite index where the package has a single-column one.
+ */
+function replaceActivityIndex(): void
+{
+    Schema::table(Tables::name('gadgets'), function (Blueprint $table): void {
+        $table->dropIndex(Tables::name('gadgets').'_activity_idx');
+        $table->index(['activity_at', 'title'], Tables::name('gadgets').'_activity_title_idx');
+    });
+}
+
+it('writes an index the site replaced as a drop plus the new index', function () {
+    replaceActivityIndex();
+
+    $declared = require siteExtensionFile();
+
+    expect($declared['tables']['gadgets']['drop_indexes'])->toBe(['gadgets_activity_idx'])
+        ->and(array_keys($declared['tables']['gadgets']['indexes']))->toBe(['gadgets_activity_title_idx'])
+        ->and($declared['tables']['gadgets'])->not->toHaveKeys(['columns', 'foreign_keys']);
+});
+
+it('refuses a replaced index nobody declared, naming both sides', function () {
+    replaceActivityIndex();
+
+    $plan = app(Adopter::class)->planFor($this->package);
+
+    expect($plan->status)->toBe(AdoptionStatus::Mismatch)
+        ->and($plan->differences)->toContain('gadgets: index gadgets_activity_idx is missing')
+        ->and($plan->differences)->toContain('gadgets: index gadgets_activity_title_idx is not expected');
+});
+
+it('adopts a table whose replaced index is declared', function () {
+    replaceActivityIndex();
+    app(SchemaRegistry::class)->extend(SchemaExtension::fromFile('site', 'gadgets', siteExtensionFile()));
+
+    $plan = app(Adopter::class)->planFor($this->package);
+
+    expect($plan->status)->toBe(AdoptionStatus::Adoptable, implode('; ', $plan->differences));
+});
+
+it('refuses a declared drop of an index the package does not have', function () {
+    $shape = TableShape::inspect('gadgets');
+
+    expect(fn () => $shape->withExtras(['drop_indexes' => ['gadgets_nonexistent_idx']]))->toThrow(InvalidArgumentException::class, 'gadgets_nonexistent_idx')
+        ->and($shape->withExtras(['drop_indexes' => ['gadgets_activity_idx']])->indexes)->not->toHaveKey('gadgets_activity_idx');
+});
