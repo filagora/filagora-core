@@ -111,11 +111,19 @@ final readonly class TableShape
      * to a table it does not own). Declaring something the shape already has is an error, so an
      * extension can never silently redefine a package's own column.
      *
-     * @param  array{columns?: array<string, Column>, indexes?: array<string, Index>, foreign_keys?: array<string, ForeignKey>}  $extras
+     * @param  array{columns?: array<string, Column>, indexes?: array<string, Index>, foreign_keys?: array<string, ForeignKey>, drop_indexes?: list<string>}  $extras
      */
     public function withExtras(array $extras): self
     {
         $merged = ['columns' => $this->columns, 'indexes' => $this->indexes, 'foreign_keys' => $this->foreignKeys];
+
+        foreach ($extras['drop_indexes'] ?? [] as $name) {
+            if (! isset($merged['indexes'][$name])) {
+                throw new \InvalidArgumentException("Schema extension drops index [{$name}], which the table does not have.");
+            }
+
+            unset($merged['indexes'][$name]);
+        }
 
         foreach (['columns', 'indexes', 'foreign_keys'] as $kind) {
             foreach ($extras[$kind] ?? [] as $name => $definition) {
@@ -133,7 +141,7 @@ final readonly class TableShape
     /**
      * What this shape has beyond a base shape: the declared-extras form `withExtras()` takes.
      *
-     * @return array{columns: array<string, Column>, indexes: array<string, Index>, foreign_keys: array<string, ForeignKey>}
+     * @return array{columns: array<string, Column>, indexes: array<string, Index>, foreign_keys: array<string, ForeignKey>, drop_indexes: list<string>}
      */
     public function extrasOver(self $base): array
     {
@@ -141,6 +149,7 @@ final readonly class TableShape
             'columns' => array_diff_key($this->columns, $base->columns),
             'indexes' => array_diff_key($this->indexes, $base->indexes),
             'foreign_keys' => array_diff_key($this->foreignKeys, $base->foreignKeys),
+            'drop_indexes' => array_keys(array_diff_key($base->indexes, $this->indexes)),
         ];
     }
 
