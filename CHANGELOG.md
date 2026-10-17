@@ -5,6 +5,12 @@ All notable changes to this package are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-10-17
+
+### Added
+
+- A schema extension can declare an index the site replaced: `drop_indexes` names base indexes the site's table does not have, because it has a composite index in their place (the composite is declared under `indexes` as before). `filagora:schema:dump-extension` writes it, and `filagora:adopt` checks the table against the package's snapshot with those indexes removed. Naming an index the package does not have is an error.
+
 ## [0.2.1] - 2026-10-14
 
 ### Added

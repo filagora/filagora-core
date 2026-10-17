@@ -46,7 +46,7 @@ Register the plugin on a Filament panel:
 | `GateAbilities`, `GatedByAbility` | Define a package's Gate abilities from its `gates` config, and gate every action of a Filament resource behind one ability |
 | `PrivacyContributor`, `RetentionRule` | Contracts for exporting and erasing a user's data and for pruning records past their retention, which the compliance package runs without knowing the packages that register them |
 | `Doctor` | Health checks that every package can add to |
-| `SchemaRegistry`, `SchemaExtension` | Table snapshots that `filagora:adopt` checks, and extensions a profile package uses to declare a site's extra columns, indexes and foreign keys |
+| `SchemaRegistry`, `SchemaExtension` | Table snapshots that `filagora:adopt` checks, and extensions a profile package uses to declare a site's extra columns, indexes and foreign keys, and base indexes the site replaced |
 
 ## Commands
 
