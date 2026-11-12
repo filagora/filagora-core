@@ -31,6 +31,7 @@ use Filagora\Core\Schema\SchemaRegistry;
 use Filagora\Core\Settings\SettingDefinitions;
 use Filagora\Core\Settings\SettingsRegistry;
 use Filagora\Core\Support\DenyAllAccessChecker;
+use Filagora\Core\Support\GateAbilities;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
@@ -68,6 +69,8 @@ class CoreServiceProvider extends ServiceProvider
                 sort: 900,
             ),
         );
+
+        GateAbilities::define('filagora.gates');
 
         Event::listen(SettingChanged::class, fn () => $this->app->make(SettingsRegistry::class)->flush());
 

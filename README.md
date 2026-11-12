@@ -72,6 +72,7 @@ Environment variables are prefixed `FILAGORA_`.
 | `markdown.line_breaks` | | `true` | A single newline becomes a visible line break |
 | `markdown.max_nesting_level` | | `100` | CommonMark nesting limit |
 | `markdown.internal_hosts` | | `[]` | Hosts whose links are not marked external (the `app.url` host is always included) |
+| `gates` | | `filagora.moderate_frontend` | The Gate abilities core defines, `ability => key`: the key the bound `AccessChecker` is asked about. Replaces the default map when you set it |
 | `settings.ability` | | `filagora.settings.manage` | The Gate ability that opens the settings screen |
 | `navigation.groups` | | `[]` | Per-group overrides, keyed by group key: `label`, `icon`, `sort`, `collapsed` |
 
@@ -82,6 +83,16 @@ it is mapped to an entitlement; without it, define it yourself:
 ```php
 Gate::define('filagora.settings.manage', fn ($user) => $user->isAdmin());
 ```
+
+### Frontend moderation
+
+`filagora.moderate_frontend` (`Filagora\Core\Support\Abilities::MODERATE_FRONTEND`) lets a user
+moderate on your own pages in every package that has moderation, such as the forums, and opens no
+dashboard screen: each package's dashboard screens keep their own ability. Use it for staff who
+should moderate the site but not see its backend. A package that has moderation accepts it next to
+its own moderate ability (`filagora-forums` does from the release that requires this one). With
+[`filagora/filagora-entitlements`](https://github.com/filagora/filagora-entitlements) it is
+a grantable entitlement; otherwise your `AccessChecker` answers for the mapped key.
 
 ## Extending
 

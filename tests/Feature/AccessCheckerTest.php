@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Filagora\Core\Contracts\AccessChecker;
 use Filagora\Core\Filament\Concerns\GatedByAbility;
+use Filagora\Core\Support\Abilities;
 use Filagora\Core\Support\DenyAllAccessChecker;
 use Filagora\Core\Support\GateAbilities;
 use Illuminate\Auth\GenericUser;
@@ -104,4 +105,15 @@ it('gates a resource action behind its ability, and denies one with no ability',
     test()->actingAs(someUser());
     expect($resource::response('viewAny'))->toBeTrue()
         ->and($resource::response('delete'))->toBeFalse();
+});
+
+it('defines the shared frontend moderation ability, denied until the checker allows its key', function () {
+    expect(config('filagora.gates'))->toBe([Abilities::MODERATE_FRONTEND => 'filagora.moderate_frontend'])
+        ->and(Gate::forUser(someUser(1))->allows(Abilities::MODERATE_FRONTEND))->toBeFalse();
+
+    app()->bind(AccessChecker::class, fn () => keyedChecker([1 => ['filagora.moderate_frontend']]));
+
+    expect(Gate::forUser(someUser(1))->allows(Abilities::MODERATE_FRONTEND))->toBeTrue()
+        ->and(Gate::forUser(someUser(2))->allows(Abilities::MODERATE_FRONTEND))->toBeFalse()
+        ->and(Gate::forUser(null)->allows(Abilities::MODERATE_FRONTEND))->toBeFalse();
 });

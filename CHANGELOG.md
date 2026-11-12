@@ -5,6 +5,10 @@ All notable changes to this package are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- **`filagora.moderate_frontend`**, a Gate ability shared by every package (`Filagora\Core\Support\Abilities::MODERATE_FRONTEND`). It lets a user moderate on the host's own pages, in the forums and any later package with moderation, and opens no dashboard screen: each package's dashboard keeps its own ability. Core defines it from the new `gates` config (`ability => key`, replaced rather than merged when a host sets it), so it answers through the bound `AccessChecker` and is denied until something grants it.
+
 ## [0.2.2] - 2026-10-17
 
 ### Added
