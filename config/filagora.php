@@ -71,6 +71,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Gates
+    |--------------------------------------------------------------------------
+    |
+    | The Gate abilities core defines, each mapped to the key the bound `AccessChecker` is asked
+    | about. `filagora.moderate_frontend` lets a user moderate on your own pages in every package
+    | that has moderation, without opening any dashboard screen. List only what you remap: this
+    | replaces the default map, it is not merged into it.
+    |
+    */
+    'gates' => [
+        'filagora.moderate_frontend' => 'filagora.moderate_frontend',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Settings
     |--------------------------------------------------------------------------
     |
