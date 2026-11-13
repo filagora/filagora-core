@@ -7,6 +7,32 @@ a database that already holds a package's tables start using the package.
 
 > `0.x`: the API may change between minor versions.
 
+## What it provides
+
+| Piece | Use |
+| --- | --- |
+| `Tables::name('forums')` | Prefixed table names (`filagora_` by default). Always use it in migrations and models |
+| `UserModel`, `UserKey::column()` | Resolve the host's user model; create user foreign-key columns in one place |
+| `ModuleRegistry` | Each package registers itself; `filagora:doctor` checks the dependency graph |
+| `NavigationGroupRegistry` | Packages declare sidebar groups; hosts override label, icon, sort and collapsed state |
+| `SettingsRegistry` + `SettingResource` | Typed key/value settings with package-declared defaults and a staff screen |
+| `MarkdownRenderer` + `ExtensionRegistry` | Safe CommonMark/GFM rendering that packages extend |
+| `AccessChecker` | The one question every package asks, "may this user do this?", answered with a key from the package's `gates` config. `filagora-entitlements` binds an answer from entitlement grants; a host can bind its own (roles, policies, a permissions package). With nothing bound everyone is denied, and `filagora:doctor` says so |
+| `GateAbilities`, `GatedByAbility` | Define a package's Gate abilities from its `gates` config, and gate every action of a Filament resource behind one ability |
+| `PrivacyContributor`, `RetentionRule` | Contracts for exporting and erasing a user's data and for pruning records past their retention, which the compliance package runs without knowing the packages that register them |
+| `Doctor` | Health checks that every package can add to |
+| `SchemaRegistry`, `SchemaExtension` | Table snapshots that `filagora:adopt` checks, and extensions a profile package uses to declare a site's extra columns, indexes and foreign keys, and base indexes the site replaced |
+
+### Commands
+
+| Command | What it does |
+| --- | --- |
+| `filagora:install` | Publishes the config, migrates and runs `filagora:doctor` |
+| `filagora:doctor` | Checks PHP, the user model, the core tables and that every module's requirements are installed |
+| `filagora:adopt` | Starts the installed packages on a database that already holds their tables: checks every table against the package's snapshot and, only if all match, records the package's migrations as run. `--dry-run` reports without recording; `--package=` limits it to one. It never alters tables or data |
+| `filagora:schema:dump` | Writes a snapshot of tables (package authors; run after the migrations) |
+| `filagora:schema:dump-extension` | Writes only what a table has beyond a package's own snapshot, as a schema extension |
+
 ## Requirements
 
 PHP 8.4, Laravel 13 and Filament 5. Tested against MariaDB 11.4.
@@ -31,32 +57,6 @@ Register the plugin on a Filament panel:
 ```php
 ->plugin(\Filagora\Core\FilagoraCorePlugin::make())
 ```
-
-## What it provides
-
-| Piece | Use |
-| --- | --- |
-| `Tables::name('forums')` | Prefixed table names (`filagora_` by default). Always use it in migrations and models |
-| `UserModel`, `UserKey::column()` | Resolve the host's user model; create user foreign-key columns in one place |
-| `ModuleRegistry` | Each package registers itself; `filagora:doctor` checks the dependency graph |
-| `NavigationGroupRegistry` | Packages declare sidebar groups; hosts override label, icon, sort and collapsed state |
-| `SettingsRegistry` + `SettingResource` | Typed key/value settings with package-declared defaults and a staff screen |
-| `MarkdownRenderer` + `ExtensionRegistry` | Safe CommonMark/GFM rendering that packages extend |
-| `AccessChecker` | The one question every package asks, "may this user do this?", answered with a key from the package's `gates` config. `filagora-entitlements` binds an answer from entitlement grants; a host can bind its own (roles, policies, a permissions package). With nothing bound everyone is denied, and `filagora:doctor` says so |
-| `GateAbilities`, `GatedByAbility` | Define a package's Gate abilities from its `gates` config, and gate every action of a Filament resource behind one ability |
-| `PrivacyContributor`, `RetentionRule` | Contracts for exporting and erasing a user's data and for pruning records past their retention, which the compliance package runs without knowing the packages that register them |
-| `Doctor` | Health checks that every package can add to |
-| `SchemaRegistry`, `SchemaExtension` | Table snapshots that `filagora:adopt` checks, and extensions a profile package uses to declare a site's extra columns, indexes and foreign keys, and base indexes the site replaced |
-
-## Commands
-
-| Command | What it does |
-| --- | --- |
-| `filagora:install` | Publishes the config, migrates and runs `filagora:doctor` |
-| `filagora:doctor` | Checks PHP, the user model, the core tables and that every module's requirements are installed |
-| `filagora:adopt` | Starts the installed packages on a database that already holds their tables: checks every table against the package's snapshot and, only if all match, records the package's migrations as run. `--dry-run` reports without recording; `--package=` limits it to one. It never alters tables or data |
-| `filagora:schema:dump` | Writes a snapshot of tables (package authors; run after the migrations) |
-| `filagora:schema:dump-extension` | Writes only what a table has beyond a package's own snapshot, as a schema extension |
 
 ## Configuration
 
