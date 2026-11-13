@@ -9,6 +9,36 @@ a database that already holds a package's tables start using the package.
 
 ## What it provides
 
+### Overview
+
+Filagora core: module registry, settings and shared support for the Filagora Filament packages.
+
+### Tables
+
+`system_settings`, prefixed `filagora_` by default. A site that already has them can run `php artisan filagora:adopt` instead of migrating.
+
+### Commands
+
+| Command | What it does |
+| --- | --- |
+| `filagora:install` | Publishes the config, migrates and runs `filagora:doctor` |
+| `filagora:doctor` | Checks PHP, the user model, the core tables and that every module's requirements are installed |
+| `filagora:adopt` | Starts the installed packages on a database that already holds their tables: checks every table against the package's snapshot and, only if all match, records the package's migrations as run. `--dry-run` reports without recording; `--package=` limits it to one. It never alters tables or data |
+| `filagora:schema:dump` | Writes a snapshot of tables (package authors; run after the migrations) |
+| `filagora:schema:dump-extension` | Writes only what a table has beyond a package's own snapshot, as a schema extension |
+
+### Events
+
+- `SettingChanged`: Dispatched after a setting row is saved or deleted.
+
+### Access
+
+| Ability | Entitlement key |
+| --- | --- |
+| `filagora.moderate_frontend` | `filagora.moderate_frontend` |
+
+### Using it
+
 | Piece | Use |
 | --- | --- |
 | `Tables::name('forums')` | Prefixed table names (`filagora_` by default). Always use it in migrations and models |
@@ -22,16 +52,6 @@ a database that already holds a package's tables start using the package.
 | `PrivacyContributor`, `RetentionRule` | Contracts for exporting and erasing a user's data and for pruning records past their retention, which the compliance package runs without knowing the packages that register them |
 | `Doctor` | Health checks that every package can add to |
 | `SchemaRegistry`, `SchemaExtension` | Table snapshots that `filagora:adopt` checks, and extensions a profile package uses to declare a site's extra columns, indexes and foreign keys, and base indexes the site replaced |
-
-### Commands
-
-| Command | What it does |
-| --- | --- |
-| `filagora:install` | Publishes the config, migrates and runs `filagora:doctor` |
-| `filagora:doctor` | Checks PHP, the user model, the core tables and that every module's requirements are installed |
-| `filagora:adopt` | Starts the installed packages on a database that already holds their tables: checks every table against the package's snapshot and, only if all match, records the package's migrations as run. `--dry-run` reports without recording; `--package=` limits it to one. It never alters tables or data |
-| `filagora:schema:dump` | Writes a snapshot of tables (package authors; run after the migrations) |
-| `filagora:schema:dump-extension` | Writes only what a table has beyond a package's own snapshot, as a schema extension |
 
 ## Requirements
 
