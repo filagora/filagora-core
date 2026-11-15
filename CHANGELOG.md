@@ -5,6 +5,13 @@ All notable changes to this package are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.2.7] - 2026-11-15
+
+### Changed
+
+- Contributions are stated to be licensed under the project's MIT Licence.
+- Merging a "Prepare x.y.z" pull request now tags the release automatically. No code changes.
+
 ## [0.2.6] - 2026-11-14
 
 ### Changed
